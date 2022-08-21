@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classnames from 'classnames';
 import SiteOrigin from '../../ui/site-origin';
 import Box from '../../ui/box';
 import {
@@ -19,17 +18,15 @@ export default class PermissionsConnectHeader extends Component {
   ///: END:ONLY_INCLUDE_IN
 
   static propTypes = {
-    className: PropTypes.string,
     iconUrl: PropTypes.string,
     iconName: PropTypes.string.isRequired,
     siteOrigin: PropTypes.string.isRequired,
     headerTitle: PropTypes.node,
     boxProps: PropTypes.shape({ ...Box.propTypes }),
     headerText: PropTypes.string,
-    rightIcon: PropTypes.node,
     ///: BEGIN:ONLY_INCLUDE_IN(flask)
     snapVersion: PropTypes.string,
-    isSnapInstallOrUpdate: PropTypes.bool,
+    isSnapInstall: PropTypes.bool,
     ///: END:ONLY_INCLUDE_IN
   };
 
@@ -45,14 +42,13 @@ export default class PermissionsConnectHeader extends Component {
       iconUrl,
       iconName,
       siteOrigin,
-      rightIcon,
       ///: BEGIN:ONLY_INCLUDE_IN(flask)
-      isSnapInstallOrUpdate,
+      isSnapInstall,
       ///: END:ONLY_INCLUDE_IN
     } = this.props;
 
     ///: BEGIN:ONLY_INCLUDE_IN(flask)
-    if (isSnapInstallOrUpdate) {
+    if (isSnapInstall) {
       return null;
     }
     ///: END:ONLY_INCLUDE_IN
@@ -64,7 +60,6 @@ export default class PermissionsConnectHeader extends Component {
           siteOrigin={siteOrigin}
           iconSrc={iconUrl}
           name={iconName}
-          rightIcon={rightIcon}
         />
       </div>
     );
@@ -73,18 +68,17 @@ export default class PermissionsConnectHeader extends Component {
   render() {
     const {
       boxProps,
-      className,
       headerTitle,
       headerText,
       ///: BEGIN:ONLY_INCLUDE_IN(flask)
       siteOrigin,
       snapVersion,
-      isSnapInstallOrUpdate,
+      isSnapInstall,
       ///: END:ONLY_INCLUDE_IN
     } = this.props;
     return (
       <Box
-        className={classnames('permissions-connect-header', className)}
+        className="permissions-connect-header"
         flexDirection={FLEX_DIRECTION.COLUMN}
         justifyContent={JUSTIFY_CONTENT.CENTER}
         {...boxProps}
@@ -93,7 +87,7 @@ export default class PermissionsConnectHeader extends Component {
         <div className="permissions-connect-header__title">{headerTitle}</div>
         {
           ///: BEGIN:ONLY_INCLUDE_IN(flask)
-          isSnapInstallOrUpdate && (
+          isSnapInstall && (
             <SnapsAuthorshipPill snapId={siteOrigin} version={snapVersion} />
           )
           ///: END:ONLY_INCLUDE_IN

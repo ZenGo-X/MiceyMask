@@ -51,7 +51,7 @@ html {
   flex-direction: column;
   background: var(--color-background-alternative);
 
-  @include screen-sm-max {
+  @media screen and (max-width: $break-small) {
     background-color: var(--color-background-default);
   }
 }

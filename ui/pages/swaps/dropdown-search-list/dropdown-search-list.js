@@ -197,8 +197,7 @@ export default function DropdownSearchList({
                   className={classnames(
                     'dropdown-search-list__closed-primary-label',
                     {
-                      'dropdown-search-list__select-default':
-                        !selectedItem?.symbol,
+                      'dropdown-search-list__select-default': !selectedItem?.symbol,
                     },
                   )}
                 >

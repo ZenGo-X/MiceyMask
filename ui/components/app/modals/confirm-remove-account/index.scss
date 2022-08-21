@@ -43,7 +43,7 @@
       margin-top: 14px;
     }
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       &__name {
         width: 90px;
       }

@@ -8,7 +8,6 @@ import Welcome from './select-action.component';
 const mapStateToProps = (state) => {
   return {
     nextRoute: getFirstTimeFlowTypeRoute(state),
-    metaMetricsId: state.metamask.metaMetricsId,
   };
 };
 

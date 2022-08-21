@@ -68,7 +68,7 @@ export default class ConfirmTransaction extends Component {
       sendTo,
       history,
       mostRecentOverviewPage,
-      transaction: { txParams: { data } = {}, origin } = {},
+      transaction: { txParams: { data } = {} } = {},
       getContractMethodData,
       transactionId,
       paramsTransactionId,
@@ -91,9 +91,7 @@ export default class ConfirmTransaction extends Component {
       return;
     }
 
-    if (origin !== 'metamask') {
-      getContractMethodData(data);
-    }
+    getContractMethodData(data);
 
     const txId = transactionId || paramsTransactionId;
     if (txId) {
@@ -109,7 +107,7 @@ export default class ConfirmTransaction extends Component {
   componentDidUpdate(prevProps) {
     const {
       setTransactionToConfirm,
-      transaction: { txData: { txParams: { data } = {}, origin } = {} },
+      transaction: { txData: { txParams: { data } = {} } = {} },
       clearConfirmTransaction,
       getContractMethodData,
       paramsTransactionId,
@@ -126,10 +124,8 @@ export default class ConfirmTransaction extends Component {
       prevProps.paramsTransactionId !== paramsTransactionId
     ) {
       clearConfirmTransaction();
+      getContractMethodData(data);
       setTransactionToConfirm(paramsTransactionId);
-      if (origin !== 'metamask') {
-        getContractMethodData(data);
-      }
     } else if (
       prevProps.transactionId &&
       !transactionId &&

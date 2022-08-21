@@ -43,9 +43,7 @@ const DetectedTokensLink = ({ className = '', setShowDetectedTokens }) => {
         className="detected-tokens-link__link"
         onClick={onClick}
       >
-        {detectedTokens.length === 1
-          ? t('numberOfNewTokensDetectedSingular')
-          : t('numberOfNewTokensDetectedPlural', [detectedTokens.length])}
+        {t('numberOfNewTokensDetected', [detectedTokens.length])}
       </Button>
     </Box>
   );

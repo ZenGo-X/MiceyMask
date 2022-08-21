@@ -5,10 +5,7 @@ import {
   INITIALIZE_END_OF_FLOW_ROUTE,
 } from '../../../../helpers/constants/routes';
 import CreateNewVault from '../../../../components/app/create-new-vault';
-import {
-  EVENT,
-  EVENT_NAMES,
-} from '../../../../../shared/constants/metametrics';
+import { EVENT } from '../../../../../shared/constants/metametrics';
 
 export default class ImportWithSeedPhrase extends PureComponent {
   static contextTypes = {
@@ -27,12 +24,12 @@ export default class ImportWithSeedPhrase extends PureComponent {
     this._onBeforeUnload = () =>
       this.context.trackEvent({
         category: EVENT.CATEGORIES.ONBOARDING,
-        event: EVENT_NAMES.WALLET_SETUP_FAILED,
+        event: 'Close window on import screen',
         properties: {
-          account_type: EVENT.ACCOUNT_TYPES.IMPORTED,
-          account_import_type: EVENT.ACCOUNT_IMPORT_TYPES.SRP,
-          reason: 'Seed Phrase Error',
-          error: this.state.seedPhraseError,
+          action: 'Import Seed Phrase',
+          legacy_event: true,
+          errorLabel: 'Seed Phrase Error',
+          errorMessage: this.state.seedPhraseError,
         },
       });
     window.addEventListener('beforeunload', this._onBeforeUnload);
@@ -43,16 +40,20 @@ export default class ImportWithSeedPhrase extends PureComponent {
   }
 
   handleImport = async (password, seedPhrase) => {
-    const { history, onSubmit, setSeedPhraseBackedUp, initializeThreeBox } =
-      this.props;
+    const {
+      history,
+      onSubmit,
+      setSeedPhraseBackedUp,
+      initializeThreeBox,
+    } = this.props;
 
     await onSubmit(password, seedPhrase);
     this.context.trackEvent({
       category: EVENT.CATEGORIES.ONBOARDING,
-      event: EVENT_NAMES.WALLET_CREATED,
+      event: 'Import Complete',
       properties: {
-        account_type: EVENT.ACCOUNT_TYPES.IMPORTED,
-        account_import_type: EVENT.ACCOUNT_IMPORT_TYPES.SRP,
+        action: 'Import Seed Phrase',
+        legacy_event: true,
       },
     });
 
@@ -72,11 +73,10 @@ export default class ImportWithSeedPhrase extends PureComponent {
               e.preventDefault();
               this.context.trackEvent({
                 category: EVENT.CATEGORIES.ONBOARDING,
-                event: EVENT_NAMES.WALLET_SETUP_CANCELED,
+                event: 'Go Back from Onboarding Import',
                 properties: {
-                  account_type: EVENT.ACCOUNT_TYPES.IMPORTED,
-                  account_import_type: EVENT.ACCOUNT_IMPORT_TYPES.SRP,
-                  text: 'Back',
+                  action: 'Import Seed Phrase',
+                  legacy_event: true,
                 },
               });
               this.props.history.push(INITIALIZE_SELECT_ACTION_ROUTE);

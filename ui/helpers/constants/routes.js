@@ -26,6 +26,7 @@ const RESTORE_VAULT_ROUTE = '/restore-vault';
 const IMPORT_TOKEN_ROUTE = '/import-token';
 const CONFIRM_IMPORT_TOKEN_ROUTE = '/confirm-import-token';
 const CONFIRM_ADD_SUGGESTED_TOKEN_ROUTE = '/confirm-add-suggested-token';
+const NEW_IMPERSONATE_ACCOUNT_ROUTE = '/new-account/impersonate';
 const NEW_ACCOUNT_ROUTE = '/new-account';
 const IMPORT_ACCOUNT_ROUTE = '/new-account/import';
 const CONNECT_HARDWARE_ROUTE = '/new-account/connect';
@@ -35,7 +36,6 @@ const CONNECT_ROUTE = '/connect';
 const CONNECT_CONFIRM_PERMISSIONS_ROUTE = '/confirm-permissions';
 ///: BEGIN:ONLY_INCLUDE_IN(flask)
 const CONNECT_SNAP_INSTALL_ROUTE = '/snap-install';
-const CONNECT_SNAP_UPDATE_ROUTE = '/snap-update';
 const NOTIFICATIONS_ROUTE = '/notifications';
 ///: END:ONLY_INCLUDE_IN
 const CONNECTED_ROUTE = '/connected';
@@ -129,42 +129,31 @@ const PATH_NAME_MAP = {
   [IMPORT_TOKEN_ROUTE]: 'Import Token Page',
   [CONFIRM_IMPORT_TOKEN_ROUTE]: 'Confirm Import Token Page',
   [CONFIRM_ADD_SUGGESTED_TOKEN_ROUTE]: 'Confirm Add Suggested Token Page',
+  [NEW_IMPERSONATE_ACCOUNT_ROUTE]: 'New Impersonate Account page',
   [NEW_ACCOUNT_ROUTE]: 'New Account Page',
   [IMPORT_ACCOUNT_ROUTE]: 'Import Account Page',
   [CONNECT_HARDWARE_ROUTE]: 'Connect Hardware Wallet Page',
   [SEND_ROUTE]: 'Send Page',
   [`${TOKEN_DETAILS}/:address`]: 'Token Details Page',
   [`${CONNECT_ROUTE}/:id`]: 'Connect To Site Confirmation Page',
-  [`${CONNECT_ROUTE}/:id${CONNECT_CONFIRM_PERMISSIONS_ROUTE}`]:
-    'Grant Connected Site Permissions Confirmation Page',
+  [`${CONNECT_ROUTE}/:id${CONNECT_CONFIRM_PERMISSIONS_ROUTE}`]: 'Grant Connected Site Permissions Confirmation Page',
   [CONNECTED_ROUTE]: 'Sites Connected To This Account Page',
   [CONNECTED_ACCOUNTS_ROUTE]: 'Accounts Connected To This Site Page',
   [`${CONFIRM_TRANSACTION_ROUTE}/:id`]: 'Confirmation Root Page',
   [CONFIRM_TRANSACTION_ROUTE]: 'Confirmation Root Page',
   // TODO: rename when this is the only confirmation page
   [CONFIRMATION_V_NEXT_ROUTE]: 'New Confirmation Page',
-  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_TOKEN_METHOD_PATH}`]:
-    'Confirm Token Method Transaction Page',
-  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_SEND_ETHER_PATH}`]:
-    'Confirm Send Ether Transaction Page',
-  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_SEND_TOKEN_PATH}`]:
-    'Confirm Send Token Transaction Page',
-  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_DEPLOY_CONTRACT_PATH}`]:
-    'Confirm Deploy Contract Transaction Page',
-  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_APPROVE_PATH}`]:
-    'Confirm Approve Transaction Page',
-  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_SET_APPROVAL_FOR_ALL_PATH}`]:
-    'Confirm Set Approval For All Transaction Page',
-  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_TRANSFER_FROM_PATH}`]:
-    'Confirm Transfer From Transaction Page',
-  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_SAFE_TRANSFER_FROM_PATH}`]:
-    'Confirm Safe Transfer From Transaction Page',
-  [`${CONFIRM_TRANSACTION_ROUTE}/:id${SIGNATURE_REQUEST_PATH}`]:
-    'Signature Request Page',
-  [`${CONFIRM_TRANSACTION_ROUTE}/:id${DECRYPT_MESSAGE_REQUEST_PATH}`]:
-    'Decrypt Message Request Page',
-  [`${CONFIRM_TRANSACTION_ROUTE}/:id${ENCRYPTION_PUBLIC_KEY_REQUEST_PATH}`]:
-    'Encryption Public Key Request Page',
+  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_TOKEN_METHOD_PATH}`]: 'Confirm Token Method Transaction Page',
+  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_SEND_ETHER_PATH}`]: 'Confirm Send Ether Transaction Page',
+  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_SEND_TOKEN_PATH}`]: 'Confirm Send Token Transaction Page',
+  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_DEPLOY_CONTRACT_PATH}`]: 'Confirm Deploy Contract Transaction Page',
+  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_APPROVE_PATH}`]: 'Confirm Approve Transaction Page',
+  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_SET_APPROVAL_FOR_ALL_PATH}`]: 'Confirm Set Approval For All Transaction Page',
+  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_TRANSFER_FROM_PATH}`]: 'Confirm Transfer From Transaction Page',
+  [`${CONFIRM_TRANSACTION_ROUTE}/:id${CONFIRM_SAFE_TRANSFER_FROM_PATH}`]: 'Confirm Safe Transfer From Transaction Page',
+  [`${CONFIRM_TRANSACTION_ROUTE}/:id${SIGNATURE_REQUEST_PATH}`]: 'Signature Request Page',
+  [`${CONFIRM_TRANSACTION_ROUTE}/:id${DECRYPT_MESSAGE_REQUEST_PATH}`]: 'Decrypt Message Request Page',
+  [`${CONFIRM_TRANSACTION_ROUTE}/:id${ENCRYPTION_PUBLIC_KEY_REQUEST_PATH}`]: 'Encryption Public Key Request Page',
   [INITIALIZE_ROUTE]: 'Initialization Page',
   [INITIALIZE_WELCOME_ROUTE]: 'Install Welcome Page',
   [INITIALIZE_UNLOCK_ROUTE]: 'Initialization Unlock page',
@@ -202,6 +191,7 @@ export {
   IMPORT_TOKEN_ROUTE,
   CONFIRM_IMPORT_TOKEN_ROUTE,
   CONFIRM_ADD_SUGGESTED_TOKEN_ROUTE,
+  NEW_IMPERSONATE_ACCOUNT_ROUTE,
   NEW_ACCOUNT_ROUTE,
   IMPORT_ACCOUNT_ROUTE,
   CONNECT_HARDWARE_ROUTE,
@@ -251,7 +241,6 @@ export {
   CONNECT_CONFIRM_PERMISSIONS_ROUTE,
   ///: BEGIN:ONLY_INCLUDE_IN(flask)
   CONNECT_SNAP_INSTALL_ROUTE,
-  CONNECT_SNAP_UPDATE_ROUTE,
   NOTIFICATIONS_ROUTE,
   ///: END:ONLY_INCLUDE_IN
   CONNECTED_ROUTE,

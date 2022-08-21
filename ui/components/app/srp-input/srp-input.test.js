@@ -1738,13 +1738,16 @@ describe('srp-input', () => {
     it('should be updated on paste to allow room for a longer SRP', async () => {
       const onChange = jest.fn();
 
-      const { getByTestId, queryByTestId, queryByRole } =
-        renderWithLocalization(
-          <SrpInput
-            onChange={onChange}
-            srpText={enLocale.secretRecoveryPhrase.message}
-          />,
-        );
+      const {
+        getByTestId,
+        queryByTestId,
+        queryByRole,
+      } = renderWithLocalization(
+        <SrpInput
+          onChange={onChange}
+          srpText={enLocale.secretRecoveryPhrase.message}
+        />,
+      );
       getByTestId('import-srp__srp-word-0').focus();
       await userEvent.paste(new Array(15).fill('test').join(' '));
 
@@ -1761,13 +1764,17 @@ describe('srp-input', () => {
     it('should be updated on paste to match the size of a shorter SRP', async () => {
       const onChange = jest.fn();
 
-      const { getByRole, getByTestId, queryByTestId, queryByRole } =
-        renderWithLocalization(
-          <SrpInput
-            onChange={onChange}
-            srpText={enLocale.secretRecoveryPhrase.message}
-          />,
-        );
+      const {
+        getByRole,
+        getByTestId,
+        queryByTestId,
+        queryByRole,
+      } = renderWithLocalization(
+        <SrpInput
+          onChange={onChange}
+          srpText={enLocale.secretRecoveryPhrase.message}
+        />,
+      );
       await userEvent.selectOptions(getByRole('combobox'), '15');
       getByTestId('import-srp__srp-word-0').focus();
       await userEvent.paste(correct);
@@ -1785,13 +1792,16 @@ describe('srp-input', () => {
     it('should round up to nearest valid size on paste when SRP has an invalid number of words', async () => {
       const onChange = jest.fn();
 
-      const { getByTestId, queryByTestId, queryByRole } =
-        renderWithLocalization(
-          <SrpInput
-            onChange={onChange}
-            srpText={enLocale.secretRecoveryPhrase.message}
-          />,
-        );
+      const {
+        getByTestId,
+        queryByTestId,
+        queryByRole,
+      } = renderWithLocalization(
+        <SrpInput
+          onChange={onChange}
+          srpText={enLocale.secretRecoveryPhrase.message}
+        />,
+      );
       getByTestId('import-srp__srp-word-0').focus();
       await userEvent.paste(invalidWordCount);
 

@@ -13,6 +13,7 @@ export default function TokenCell({
   balanceError,
   symbol,
   string,
+  image,
   onClick,
   isERC721,
 }) {
@@ -43,6 +44,7 @@ export default function TokenCell({
       iconClassName="token-cell__icon"
       onClick={onClick.bind(null, address)}
       tokenAddress={address}
+      tokenImage={image}
       tokenSymbol={symbol}
       tokenDecimals={decimals}
       warning={warning}
@@ -59,6 +61,7 @@ TokenCell.propTypes = {
   symbol: PropTypes.string,
   decimals: PropTypes.number,
   string: PropTypes.string,
+  image: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   isERC721: PropTypes.bool,
 };

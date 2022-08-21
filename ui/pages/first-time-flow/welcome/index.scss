@@ -38,7 +38,7 @@
       color: var(--color-primary-default);
     }
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       font-size: 0.9rem;
     }
   }

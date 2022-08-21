@@ -168,10 +168,10 @@ describe('ConfirmSeedPhrase Component', () => {
 
     expect(trackEventSpy.args[0][0]).toStrictEqual({
       category: 'Onboarding',
-      event: 'Wallet Created',
+      event: 'Verify Complete',
       properties: {
-        account_type: 'metamask',
-        is_backup_skipped: false,
+        action: 'Seed Phrase Setup',
+        legacy_event: true,
       },
     });
     expect(initialize3BoxSpy.calledOnce).toStrictEqual(true);

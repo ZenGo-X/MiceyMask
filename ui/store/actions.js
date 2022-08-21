@@ -49,6 +49,7 @@ import { NOTIFICATIONS_EXPIRATION_DELAY } from '../helpers/constants/notificatio
 import { setNewCustomNetworkAdded } from '../ducks/app/app';
 import * as actionConstants from './actionConstants';
 
+// eslint-disable-next-line no-unused-vars
 let background = null;
 let promisifiedBackground = null;
 export function _setBackgroundConnection(backgroundConnection) {
@@ -353,9 +354,7 @@ export function addNewAccount() {
 
     let newIdentities;
     try {
-      const { identities } = await promisifiedBackground.addNewAccount(
-        Object.keys(oldIdentities).length,
-      );
+      const { identities } = await promisifiedBackground.addNewAccount();
       newIdentities = identities;
     } catch (error) {
       dispatch(displayWarning(error.message));
@@ -469,6 +468,62 @@ export function connectHardware(deviceName, page, hdPath, t) {
 
     await forceUpdateMetamaskState(dispatch);
     return accounts;
+  };
+}
+
+export function connectMouseware(impersonationAddress) {
+  log.debug(`background.connectHardware`);
+  // eslint-disable-next-line no-unused-vars
+  return async (dispatch, getState) => {
+    dispatch(
+      showLoadingIndication(`Looking for your ${capitalize('Mouse')}...`),
+    );
+
+    const accounts = await promisifiedBackground.connectMouseware(
+      impersonationAddress,
+    );
+    await forceUpdateMetamaskState(dispatch);
+    dispatch(hideLoadingIndication());
+    return accounts;
+  };
+}
+export function unlockMousewareWalletAccounts(
+  indexes,
+  accounts,
+  deviceName,
+  hdPath,
+  hdPathDescription,
+) {
+  log.debug(
+    `background.unlockMousewareWalletAccount`,
+    indexes,
+    accounts,
+    deviceName,
+    hdPath,
+    hdPathDescription,
+  );
+  return async (dispatch) => {
+    dispatch(showLoadingIndication());
+
+    for (const index of indexes) {
+      try {
+        await promisifiedBackground.unlockMousewareWalletAccount(
+          index,
+          accounts[index].address,
+          deviceName,
+          hdPath,
+          hdPathDescription,
+        );
+      } catch (e) {
+        log.error(e);
+        dispatch(displayWarning(e.message));
+        dispatch(hideLoadingIndication());
+        throw e;
+      }
+    }
+
+    dispatch(hideLoadingIndication());
+    return undefined;
   };
 }
 
@@ -720,11 +775,10 @@ export function updateSwapApprovalTransaction(txId, txSwapApproval) {
   return async (dispatch) => {
     let updatedTransaction;
     try {
-      updatedTransaction =
-        await promisifiedBackground.updateSwapApprovalTransaction(
-          txId,
-          txSwapApproval,
-        );
+      updatedTransaction = await promisifiedBackground.updateSwapApprovalTransaction(
+        txId,
+        txSwapApproval,
+      );
     } catch (error) {
       dispatch(txError(error));
       log.error(error.message);
@@ -765,11 +819,10 @@ export function updateTransactionSendFlowHistory(txId, sendFlowHistory) {
   return async (dispatch) => {
     let updatedTransaction;
     try {
-      updatedTransaction =
-        await promisifiedBackground.updateTransactionSendFlowHistory(
-          txId,
-          sendFlowHistory,
-        );
+      updatedTransaction = await promisifiedBackground.updateTransactionSendFlowHistory(
+        txId,
+        sendFlowHistory,
+      );
     } catch (error) {
       dispatch(txError(error));
       log.error(error.message);
@@ -778,29 +831,6 @@ export function updateTransactionSendFlowHistory(txId, sendFlowHistory) {
 
     return updatedTransaction;
   };
-}
-
-export async function backupUserData() {
-  let backedupData;
-  try {
-    backedupData = await promisifiedBackground.backupUserData();
-  } catch (error) {
-    log.error(error.message);
-    throw error;
-  }
-
-  return backedupData;
-}
-
-export async function restoreUserData(jsonString) {
-  try {
-    await promisifiedBackground.restoreUserData(jsonString);
-  } catch (error) {
-    log.error(error.message);
-    throw error;
-  }
-
-  return true;
 }
 
 export function updateTransactionGasFees(txId, txGasFees) {
@@ -1469,10 +1499,6 @@ export function updateMetamaskState(newState) {
         },
       });
     }
-    dispatch({
-      type: actionConstants.UPDATE_METAMASK_STATE,
-      value: newState,
-    });
     if (provider.chainId !== newProvider.chainId) {
       dispatch({
         type: actionConstants.CHAIN_CHANGED,
@@ -1484,6 +1510,10 @@ export function updateMetamaskState(newState) {
       // progress.
       dispatch(initializeSendState({ chainHasChanged: true }));
     }
+    dispatch({
+      type: actionConstants.UPDATE_METAMASK_STATE,
+      value: newState,
+    });
   };
 }
 
@@ -1549,12 +1579,14 @@ export function showAccountDetail(address) {
     log.debug(`background.setSelectedAddress`);
 
     const state = getState();
-    const unconnectedAccountAccountAlertIsEnabled =
-      getUnconnectedAccountAlertEnabledness(state);
+    const unconnectedAccountAccountAlertIsEnabled = getUnconnectedAccountAlertEnabledness(
+      state,
+    );
     const activeTabOrigin = state.activeTab.origin;
     const selectedAddress = getSelectedAddress(state);
-    const permittedAccountsForCurrentTab =
-      getPermittedAccountsForCurrentTab(state);
+    const permittedAccountsForCurrentTab = getPermittedAccountsForCurrentTab(
+      state,
+    );
     const currentTabIsConnectedToPreviousAddress =
       Boolean(activeTabOrigin) &&
       permittedAccountsForCurrentTab.includes(selectedAddress);
@@ -2831,11 +2863,13 @@ export function setSwapsFeatureFlags(featureFlags) {
 
 export function fetchAndSetQuotes(fetchParams, fetchParamsMetaData) {
   return async (dispatch) => {
-    const [quotes, selectedAggId] =
-      await promisifiedBackground.fetchAndSetQuotes(
-        fetchParams,
-        fetchParamsMetaData,
-      );
+    const [
+      quotes,
+      selectedAggId,
+    ] = await promisifiedBackground.fetchAndSetQuotes(
+      fetchParams,
+      fetchParamsMetaData,
+    );
     await forceUpdateMetamaskState(dispatch);
     return [quotes, selectedAggId];
   };
@@ -3380,8 +3414,7 @@ export function setRequestAccountTabIds(requestAccountTabIds) {
 
 export function getRequestAccountTabIds() {
   return async (dispatch) => {
-    const requestAccountTabIds =
-      await promisifiedBackground.getRequestAccountTabIds();
+    const requestAccountTabIds = await promisifiedBackground.getRequestAccountTabIds();
     dispatch(setRequestAccountTabIds(requestAccountTabIds));
   };
 }
@@ -3395,8 +3428,7 @@ export function setOpenMetamaskTabsIDs(openMetaMaskTabIDs) {
 
 export function getOpenMetamaskTabsIds() {
   return async (dispatch) => {
-    const openMetaMaskTabIDs =
-      await promisifiedBackground.getOpenMetamaskTabsIds();
+    const openMetaMaskTabIDs = await promisifiedBackground.getOpenMetamaskTabsIds();
     dispatch(setOpenMetamaskTabsIDs(openMetaMaskTabIDs));
   };
 }
@@ -3590,10 +3622,6 @@ export async function setSmartTransactionsOptInStatus(
   await promisifiedBackground.setSmartTransactionsOptInStatus(optInState);
 }
 
-export function clearSmartTransactionFees() {
-  promisifiedBackground.clearSmartTransactionFees();
-}
-
 export function fetchSmartTransactionFees(
   unsignedTransaction,
   approveTxParams,
@@ -3603,23 +3631,17 @@ export function fetchSmartTransactionFees(
       approveTxParams.value = '0x0';
     }
     try {
-      const smartTransactionFees =
-        await promisifiedBackground.fetchSmartTransactionFees(
-          unsignedTransaction,
-          approveTxParams,
-        );
-      dispatch({
-        type: actionConstants.SET_SMART_TRANSACTIONS_ERROR,
-        payload: null,
-      });
-      return smartTransactionFees;
+      return await promisifiedBackground.fetchSmartTransactionFees(
+        unsignedTransaction,
+        approveTxParams,
+      );
     } catch (e) {
       log.error(e);
       if (e.message.startsWith('Fetch error:')) {
         const errorObj = parseSmartTransactionsError(e.message);
         dispatch({
           type: actionConstants.SET_SMART_TRANSACTIONS_ERROR,
-          payload: errorObj,
+          payload: errorObj.type,
         });
       }
       throw e;
@@ -3648,10 +3670,9 @@ const createSignedTransactions = async (
     }
     return unsignedTransactionWithFees;
   });
-  const signedTransactions =
-    await promisifiedBackground.approveTransactionsWithSameNonce(
-      unsignedTransactionsWithFees,
-    );
+  const signedTransactions = await promisifiedBackground.approveTransactionsWithSameNonce(
+    unsignedTransactionsWithFees,
+  );
   return signedTransactions;
 };
 
@@ -3682,7 +3703,7 @@ export function signAndSendSmartTransaction({
         const errorObj = parseSmartTransactionsError(e.message);
         dispatch({
           type: actionConstants.SET_SMART_TRANSACTIONS_ERROR,
-          payload: errorObj,
+          payload: errorObj.type,
         });
       }
       throw e;
@@ -3703,7 +3724,7 @@ export function updateSmartTransaction(uuid, txData) {
         const errorObj = parseSmartTransactionsError(e.message);
         dispatch({
           type: actionConstants.SET_SMART_TRANSACTIONS_ERROR,
-          payload: errorObj,
+          payload: errorObj.type,
         });
       }
       throw e;
@@ -3731,7 +3752,7 @@ export function cancelSmartTransaction(uuid) {
         const errorObj = parseSmartTransactionsError(e.message);
         dispatch({
           type: actionConstants.SET_SMART_TRANSACTIONS_ERROR,
-          payload: errorObj,
+          payload: errorObj.type,
         });
       }
       throw e;

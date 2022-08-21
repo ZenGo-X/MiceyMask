@@ -25,12 +25,7 @@ export default class MenuDroppoComponent extends Component {
     const innerStyle = this.props.innerStyle || {};
 
     return (
-      <div
-        className="menu-droppo"
-        key="menu-droppo-drawer"
-        data-testid="menu-droppo"
-        style={innerStyle}
-      >
+      <div className="menu-droppo" key="menu-droppo-drawer" style={innerStyle}>
         {this.props.children}
       </div>
     );
@@ -81,7 +76,6 @@ export default class MenuDroppoComponent extends Component {
       <div
         style={baseStyle}
         className={`menu-droppo-container ${containerClassName}`}
-        data-testid={containerClassName}
       >
         <style>
           {`

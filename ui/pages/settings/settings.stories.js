@@ -21,6 +21,8 @@ import {
 import SettingsPage from './settings.component';
 
 export default {
+  title: 'Pages/SettingsPage',
+  id: __filename,
   decorators: [
     (story) => (
       <MemoryRouter initialEntries={['/settings/general']}>
@@ -28,24 +30,22 @@ export default {
       </MemoryRouter>
     ),
   ],
-  id: __filename,
-  title: 'Pages/SettingsPage',
 };
 
 const ROUTES_TO_I18N_KEYS = {
   [ABOUT_US_ROUTE]: 'about',
   [ADVANCED_ROUTE]: 'advanced',
   [ALERTS_ROUTE]: 'alerts',
+  [GENERAL_ROUTE]: 'general',
   [CONTACT_ADD_ROUTE]: 'newContact',
   [CONTACT_EDIT_ROUTE]: 'editContact',
   [CONTACT_LIST_ROUTE]: 'contacts',
-  [CONTACT_VIEW_ROUTE]: 'viewContact',
-  [GENERAL_ROUTE]: 'general',
-  [NETWORKS_FORM_ROUTE]: 'networks',
-  [NETWORKS_ROUTE]: 'networks',
-  [SECURITY_ROUTE]: 'securityAndPrivacy',
   [SNAPS_LIST_ROUTE]: 'snaps',
   [SNAPS_VIEW_ROUTE]: 'snaps',
+  [CONTACT_VIEW_ROUTE]: 'viewContact',
+  [NETWORKS_ROUTE]: 'networks',
+  [NETWORKS_FORM_ROUTE]: 'networks',
+  [SECURITY_ROUTE]: 'securityAndPrivacy',
 };
 
 global.platform = {

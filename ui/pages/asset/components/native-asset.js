@@ -10,7 +10,6 @@ import {
   getCurrentChainId,
   getRpcPrefsForCurrentProvider,
   getSelectedAddress,
-  getIsCustomNetwork,
 } from '../../../selectors/selectors';
 import { showModal } from '../../../store/actions';
 import { DEFAULT_ROUTE } from '../../../helpers/constants/routes';
@@ -32,7 +31,6 @@ export default function NativeAsset({ nativeCurrency }) {
   const history = useHistory();
   const accountLink = getAccountLink(address, chainId, rpcPrefs);
   const trackEvent = useContext(MetaMetricsContext);
-  const isCustomNetwork = useSelector(getIsCustomNetwork);
 
   return (
     <>
@@ -40,6 +38,7 @@ export default function NativeAsset({ nativeCurrency }) {
         accountName={selectedAccountName}
         assetName={nativeCurrency}
         onBack={() => history.push(DEFAULT_ROUTE)}
+        isEthNetwork={!rpcPrefs.blockExplorerUrl}
         optionsButton={
           <AssetOptions
             isNativeAsset
@@ -60,7 +59,6 @@ export default function NativeAsset({ nativeCurrency }) {
             onViewAccountDetails={() => {
               dispatch(showModal({ name: 'ACCOUNT_DETAILS' }));
             }}
-            isCustomNetwork={isCustomNetwork}
           />
         }
       />

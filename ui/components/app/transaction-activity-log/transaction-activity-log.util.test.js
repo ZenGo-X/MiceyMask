@@ -21,7 +21,8 @@ describe('TransactionActivityLog utils', () => {
     it('should return activities for an array of transactions', () => {
       const transactions = [
         {
-          hash: '0xa14f13d36b3901e352ce3a7acb9b47b001e5a3370f06232a0953c6fc6fad91b3',
+          hash:
+            '0xa14f13d36b3901e352ce3a7acb9b47b001e5a3370f06232a0953c6fc6fad91b3',
           history: [
             {
               id: 6400627574331058,
@@ -91,7 +92,8 @@ describe('TransactionActivityLog utils', () => {
           type: TRANSACTION_TYPES.STANDARD,
         },
         {
-          hash: '0xecbe181ee67c4291d04a7cb9ffbf1d5d831e4fbaa89994fd06bab5dd4cc79b33',
+          hash:
+            '0xecbe181ee67c4291d04a7cb9ffbf1d5d831e4fbaa89994fd06bab5dd4cc79b33',
           history: [
             {
               id: 6400627574331060,
@@ -193,7 +195,8 @@ describe('TransactionActivityLog utils', () => {
           id: 6400627574331058,
           metamaskNetworkId: ROPSTEN_NETWORK_ID,
           chainId: ROPSTEN_CHAIN_ID,
-          hash: '0xa14f13d36b3901e352ce3a7acb9b47b001e5a3370f06232a0953c6fc6fad91b3',
+          hash:
+            '0xa14f13d36b3901e352ce3a7acb9b47b001e5a3370f06232a0953c6fc6fad91b3',
           eventKey: 'transactionCreated',
           timestamp: 1543958845581,
           value: '0x2386f26fc10000',
@@ -202,7 +205,8 @@ describe('TransactionActivityLog utils', () => {
           id: 6400627574331058,
           metamaskNetworkId: ROPSTEN_NETWORK_ID,
           chainId: ROPSTEN_CHAIN_ID,
-          hash: '0xa14f13d36b3901e352ce3a7acb9b47b001e5a3370f06232a0953c6fc6fad91b3',
+          hash:
+            '0xa14f13d36b3901e352ce3a7acb9b47b001e5a3370f06232a0953c6fc6fad91b3',
           eventKey: 'transactionSubmitted',
           timestamp: 1543958848147,
           value: '0x1319718a5000',
@@ -211,7 +215,8 @@ describe('TransactionActivityLog utils', () => {
           id: 6400627574331060,
           metamaskNetworkId: ROPSTEN_NETWORK_ID,
           chainId: ROPSTEN_CHAIN_ID,
-          hash: '0xecbe181ee67c4291d04a7cb9ffbf1d5d831e4fbaa89994fd06bab5dd4cc79b33',
+          hash:
+            '0xecbe181ee67c4291d04a7cb9ffbf1d5d831e4fbaa89994fd06bab5dd4cc79b33',
           eventKey: 'transactionResubmitted',
           timestamp: 1543958860061,
           value: '0x171c3a061400',
@@ -220,7 +225,8 @@ describe('TransactionActivityLog utils', () => {
           id: 6400627574331060,
           metamaskNetworkId: ROPSTEN_NETWORK_ID,
           chainId: ROPSTEN_CHAIN_ID,
-          hash: '0xecbe181ee67c4291d04a7cb9ffbf1d5d831e4fbaa89994fd06bab5dd4cc79b33',
+          hash:
+            '0xecbe181ee67c4291d04a7cb9ffbf1d5d831e4fbaa89994fd06bab5dd4cc79b33',
           eventKey: 'transactionConfirmed',
           timestamp: 1543958897165,
           value: '0x171c3a061400',

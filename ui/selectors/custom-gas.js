@@ -301,14 +301,17 @@ export function getRenderableBasicEstimateData(state, gasLimit) {
   const { conversionRate } = state.metamask;
   const currentCurrency = getCurrentCurrency(state);
 
-  const { slowEstimateData, averageEstimateData, fastEstimateData } =
-    getRenderableGasButtonData(
-      getGasFeeEstimates(state),
-      gasLimit,
-      showFiat,
-      conversionRate,
-      currentCurrency,
-    );
+  const {
+    slowEstimateData,
+    averageEstimateData,
+    fastEstimateData,
+  } = getRenderableGasButtonData(
+    getGasFeeEstimates(state),
+    gasLimit,
+    showFiat,
+    conversionRate,
+    currentCurrency,
+  );
 
   return [slowEstimateData, averageEstimateData, fastEstimateData];
 }

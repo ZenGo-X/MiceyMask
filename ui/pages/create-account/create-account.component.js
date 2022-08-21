@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import {
+  NEW_IMPERSONATE_ACCOUNT_ROUTE,
   NEW_ACCOUNT_ROUTE,
   IMPORT_ACCOUNT_ROUTE,
   CONNECT_HARDWARE_ROUTE,
@@ -9,6 +10,7 @@ import {
 import NewAccountCreateForm from './new-account.container';
 import NewAccountImportForm from './import-account';
 import ConnectHardwareForm from './connect-hardware';
+import ConnectImpersonateForm from './connect-impersonate-account';
 
 export default class CreateAccountPage extends Component {
   render() {
@@ -16,6 +18,11 @@ export default class CreateAccountPage extends Component {
       <div className="new-account">
         <div className="new-account__form">
           <Switch>
+            <Route
+              exact
+              path={NEW_IMPERSONATE_ACCOUNT_ROUTE}
+              component={ConnectImpersonateForm}
+            />
             <Route
               exact
               path={NEW_ACCOUNT_ROUTE}

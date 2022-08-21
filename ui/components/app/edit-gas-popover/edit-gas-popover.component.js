@@ -63,8 +63,10 @@ export default function EditGasPopover({
     supportsEIP1559;
   const [showEducationContent, setShowEducationContent] = useState(false);
 
-  const [dappSuggestedGasFeeAcknowledged, setDappSuggestedGasFeeAcknowledged] =
-    useState(false);
+  const [
+    dappSuggestedGasFeeAcknowledged,
+    setDappSuggestedGasFeeAcknowledged,
+  ] = useState(false);
 
   const minimumGasLimitDec = hexToDecimal(minimumGasLimit);
   const updatedCustomGasSettings = useIncrementedGasFees(transaction);

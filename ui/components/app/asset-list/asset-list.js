@@ -11,7 +11,6 @@ import {
   getShouldShowFiat,
   getNativeCurrencyImage,
   getDetectedTokensInCurrentNetwork,
-  getIstokenDetectionInactiveOnNonMainnetSupportedNetwork,
 } from '../../../selectors';
 import { getNativeCurrency } from '../../../ducks/metamask/metamask';
 import { useCurrencyDisplay } from '../../../hooks/useCurrencyDisplay';
@@ -25,7 +24,7 @@ import {
 } from '../../../helpers/constants/design-system';
 import { useI18nContext } from '../../../hooks/useI18nContext';
 import { MetaMetricsContext } from '../../../contexts/metametrics';
-import { EVENT, EVENT_NAMES } from '../../../../shared/constants/metametrics';
+import { EVENT } from '../../../../shared/constants/metametrics';
 import DetectedToken from '../detected-token/detected-token';
 import DetectedTokensLink from './detetcted-tokens-link/detected-tokens-link';
 
@@ -58,17 +57,16 @@ const AssetList = ({ onClickAsset }) => {
     },
   );
 
-  const [secondaryCurrencyDisplay, secondaryCurrencyProperties] =
-    useCurrencyDisplay(selectedAccountBalance, {
-      numberOfDecimals: secondaryNumberOfDecimals,
-      currency: secondaryCurrency,
-    });
+  const [
+    secondaryCurrencyDisplay,
+    secondaryCurrencyProperties,
+  ] = useCurrencyDisplay(selectedAccountBalance, {
+    numberOfDecimals: secondaryNumberOfDecimals,
+    currency: secondaryCurrency,
+  });
 
   const primaryTokenImage = useSelector(getNativeCurrencyImage);
   const detectedTokens = useSelector(getDetectedTokensInCurrentNetwork) || [];
-  const istokenDetectionInactiveOnNonMainnetSupportedNetwork = useSelector(
-    getIstokenDetectionInactiveOnNonMainnetSupportedNetwork,
-  );
 
   return (
     <>
@@ -87,19 +85,20 @@ const AssetList = ({ onClickAsset }) => {
         onTokenClick={(tokenAddress) => {
           onClickAsset(tokenAddress);
           trackEvent({
-            event: EVENT_NAMES.TOKEN_SCREEN_OPENED,
+            event: 'Clicked Token',
             category: EVENT.CATEGORIES.NAVIGATION,
             properties: {
-              token_symbol: primaryCurrencyProperties.suffix,
-              location: 'Home',
+              action: 'Token Menu',
+              legacy_event: true,
             },
           });
         }}
       />
-      {detectedTokens.length > 0 &&
-        !istokenDetectionInactiveOnNonMainnetSupportedNetwork && (
-          <DetectedTokensLink setShowDetectedTokens={setShowDetectedTokens} />
-        )}
+      {process.env.TOKEN_DETECTION_V2
+        ? detectedTokens.length > 0 && (
+            <DetectedTokensLink setShowDetectedTokens={setShowDetectedTokens} />
+          )
+        : null}
       <Box marginTop={detectedTokens.length > 0 ? 0 : 4}>
         <Box justifyContent={JUSTIFY_CONTENT.CENTER}>
           <Typography

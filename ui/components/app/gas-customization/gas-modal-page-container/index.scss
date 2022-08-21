@@ -7,7 +7,7 @@
     min-height: 585px;
     overflow-y: initial;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       &__content {
         display: flex;
         overflow-y: initial;
@@ -87,7 +87,7 @@
 }
 
 .gas-modal-content {
-  @include screen-sm-max {
+  @media screen and (max-width: $break-small) {
     width: 100%;
   }
 
@@ -124,7 +124,7 @@
       &__label {
         @include Paragraph;
 
-        @include screen-sm-max {
+        @media screen and (max-width: $break-small) {
           @include H6;
         }
       }
@@ -134,7 +134,7 @@
 
         font-weight: bold;
 
-        @include screen-sm-max {
+        @media screen and (max-width: $break-small) {
           @include H6;
         }
       }

@@ -59,8 +59,11 @@ export default class LoadingNetworkScreen extends PureComponent {
   };
 
   renderErrorScreenContent = () => {
-    const { showNetworkDropdown, setProviderArgs, setProviderType } =
-      this.props;
+    const {
+      showNetworkDropdown,
+      setProviderArgs,
+      setProviderType,
+    } = this.props;
 
     return (
       <div className="loading-overlay__error-screen">

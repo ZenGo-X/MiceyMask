@@ -97,13 +97,13 @@
     white-space: nowrap;
   }
 
-  @include screen-sm-max {
+  @media (max-width: $break-small) {
     &__mid-content {
       display: none;
     }
   }
 
-  @include screen-sm-min {
+  @media (min-width: $break-large) {
     grid-template-areas:
       'icon head     head     head     head     mid mid mid mid right right right'
       'icon sub      sub      sub      sub      mid mid mid mid right right right'
@@ -115,7 +115,7 @@
   grid-template-areas: 'icon head     head     head     head     head     head     head     right right right right';
   align-items: center;
 
-  @include screen-sm-min {
+  @media (min-width: $break-large) {
     grid-template-areas: 'icon head     head     head     head     mid mid mid mid right right right';
   }
 }

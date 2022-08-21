@@ -193,8 +193,9 @@ const insertTransactionByTime = (transactions, transaction) => {
  * array of transactionGroups.
  */
 const insertTransactionGroupByTime = (transactionGroups, transactionGroup) => {
-  const { primaryTransaction: { time: groupToInsertTime } = {} } =
-    transactionGroup;
+  const {
+    primaryTransaction: { time: groupToInsertTime } = {},
+  } = transactionGroup;
 
   let insertIndex = transactionGroups.length;
 

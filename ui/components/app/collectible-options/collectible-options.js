@@ -6,8 +6,10 @@ import { Menu, MenuItem } from '../../ui/menu';
 
 const CollectibleOptions = ({ onRemove, onViewOnOpensea }) => {
   const t = useContext(I18nContext);
-  const [collectibleOptionsButtonElement, setCollectibleOptionsButtonElement] =
-    useState(null);
+  const [
+    collectibleOptionsButtonElement,
+    setCollectibleOptionsButtonElement,
+  ] = useState(null);
   const [collectibleOptionsOpen, setCollectibleOptionsOpen] = useState(false);
 
   return (

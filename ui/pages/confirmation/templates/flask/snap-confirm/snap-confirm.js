@@ -76,7 +76,8 @@ function getValues(pendingApproval, t, actions) {
             children: t('learnMoreUpperCase'),
             key: 'learnMore-a-href',
             props: {
-              href: 'https://metamask.zendesk.com/hc/en-us/articles/4405506066331-User-guide-Dapps',
+              href:
+                'https://metamask.zendesk.com/hc/en-us/articles/4405506066331-User-guide-Dapps',
               target: '__blank',
             },
           },

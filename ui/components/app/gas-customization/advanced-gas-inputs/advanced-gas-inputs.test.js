@@ -105,7 +105,7 @@ describe('AdvancedGasInputs', () => {
       store,
     );
 
-    expect(queryByText('Gas price extremely low')).toBeInTheDocument();
+    expect(queryByText('Gas Price Extremely Low')).toBeInTheDocument();
   });
 
   it('errors when custom gas price is too excessive', () => {
@@ -114,6 +114,6 @@ describe('AdvancedGasInputs', () => {
       store,
     );
 
-    expect(queryByText('Gas price is excessive')).toBeInTheDocument();
+    expect(queryByText('Gas Price Is Excessive')).toBeInTheDocument();
   });
 });

@@ -9,7 +9,7 @@
       'too-many-words-error too-many-words-error';
   }
 
-  @include screen-md-max {
+  @media (max-width: 767px) {
     &__container {
       grid-template-areas:
         'title'
@@ -44,7 +44,7 @@
     grid-area: input;
   }
 
-  @include screen-md-max {
+  @media (max-width: 767px) {
     &__srp {
       grid-template-columns: 1fr;
     }

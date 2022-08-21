@@ -219,8 +219,7 @@ export default class ConfirmDecryptMessage extends Component {
           <div
             className={classnames({
               'request-decrypt-message__message-copy': true,
-              'request-decrypt-message__message-copy--pressed':
-                copyToClipboardPressed,
+              'request-decrypt-message__message-copy--pressed': copyToClipboardPressed,
             })}
             onClick={() => this.copyMessage()}
             onMouseDown={() => this.setState({ copyToClipboardPressed: true })}

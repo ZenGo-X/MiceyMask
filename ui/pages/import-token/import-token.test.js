@@ -39,7 +39,6 @@ describe('Import Token', () => {
         frequentRpcListDetail: [],
         identities: {},
         selectedAddress: '0x1231231',
-        useTokenDetection: true,
       },
       history: {
         mostRecentOverviewPage: '/',
@@ -52,18 +51,18 @@ describe('Import Token', () => {
   };
 
   describe('Import Token', () => {
-    it('add custom token button is disabled when no fields are populated', () => {
+    it('add Custom Token button is disabled when no fields are populated', () => {
       const { getByText } = render();
-      const customTokenButton = getByText('Custom token');
+      const customTokenButton = getByText('Custom Token');
       fireEvent.click(customTokenButton);
-      const submit = getByText('Add custom token');
+      const submit = getByText('Add Custom Token');
 
       expect(submit).toBeDisabled();
     });
 
     it('edits token address', () => {
       const { getByText } = render();
-      const customTokenButton = getByText('Custom token');
+      const customTokenButton = getByText('Custom Token');
       fireEvent.click(customTokenButton);
 
       const tokenAddress = '0x617b3f8050a0BD94b6b1da02B4384eE5B4DF13F4';
@@ -77,7 +76,7 @@ describe('Import Token', () => {
 
     it('edits token symbol', () => {
       const { getByText } = render();
-      const customTokenButton = getByText('Custom token');
+      const customTokenButton = getByText('Custom Token');
       fireEvent.click(customTokenButton);
 
       const tokenSymbol = 'META';
@@ -91,7 +90,7 @@ describe('Import Token', () => {
 
     it('edits token decimal precision', () => {
       const { getByText } = render();
-      const customTokenButton = getByText('Custom token');
+      const customTokenButton = getByText('Custom Token');
       fireEvent.click(customTokenButton);
 
       const tokenPrecision = '2';
@@ -105,10 +104,10 @@ describe('Import Token', () => {
 
     it('adds custom tokens successfully', async () => {
       const { getByText } = render();
-      const customTokenButton = getByText('Custom token');
+      const customTokenButton = getByText('Custom Token');
       fireEvent.click(customTokenButton);
 
-      const submit = getByText('Add custom token');
+      const submit = getByText('Add Custom Token');
       expect(submit).toBeDisabled();
 
       const tokenAddress = '0x617b3f8050a0BD94b6b1da02B4384eE5B4DF13F4';
@@ -158,10 +157,10 @@ describe('Import Token', () => {
       );
 
       const { getByText } = render();
-      const customTokenButton = getByText('Custom token');
+      const customTokenButton = getByText('Custom Token');
       fireEvent.click(customTokenButton);
 
-      const submit = getByText('Add custom token');
+      const submit = getByText('Add Custom Token');
       expect(submit).toBeDisabled();
 
       const tokenAddress = '0x617b3f8050a0BD94b6b1da02B4384eE5B4DF13F4';

@@ -24,10 +24,17 @@
     justify-items: center;
     align-items: center;
     row-gap: 16px;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
 
-    @include screen-sm-min {
-      grid-template-columns: 1fr 1fr 1fr;
+    @media screen and (max-width: 460px) {
+      grid-template-columns: 198px;
+    }
+
+    @media screen and (min-width: 460px) and (max-width: $break-small) {
+      grid-template-columns: 181px 181px;
+    }
+
+    @media screen and (min-width: $break-large) {
+      grid-template-columns: 166px 166px 166px;
     }
 
     &--hidden {
@@ -78,7 +85,7 @@
     align-items: center;
     width: 100%;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       margin-inline-start: 40px;
       margin-inline-end: 40px;
       margin-bottom: 40px;
@@ -91,7 +98,7 @@
       align-items: center;
       width: 100%;
 
-      @include screen-md-min {
+      @media screen and (min-width: $break-small) {
         margin-top: 20px;
       }
 
@@ -105,7 +112,7 @@
     &--button {
       align-self: center;
 
-      @include screen-sm-min {
+      @media screen and (min-width: $break-large) {
         max-width: 300px;
       }
     }
@@ -120,7 +127,7 @@
         flex-direction: row;
         justify-content: space-between;
 
-        @include screen-sm-min {
+        @media screen and (min-width: $break-large) {
           justify-content: space-around;
         }
       }
@@ -145,7 +152,7 @@
           justify-content: flex-end;
         }
 
-        @include screen-sm-max {
+        @media screen and (max-width: $break-small) {
           justify-content: center;
           width: 100%;
         }
@@ -180,7 +187,7 @@
   }
 
   &__confirm {
-    @include screen-sm-min {
+    @media screen and (min-width: $break-large) {
       display: flex;
       flex-direction: column;
       align-items: center;

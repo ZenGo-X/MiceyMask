@@ -22,8 +22,11 @@ import { useI18nContext } from '../../../../hooks/useI18nContext';
 const AdvancedGasFeeDefaults = () => {
   const t = useI18nContext();
   const dispatch = useDispatch();
-  const { gasErrors, maxBaseFee, maxPriorityFeePerGas } =
-    useAdvancedGasFeePopoverContext();
+  const {
+    gasErrors,
+    maxBaseFee,
+    maxPriorityFeePerGas,
+  } = useAdvancedGasFeePopoverContext();
   const advancedGasFeeValues = useSelector(getAdvancedGasFeeValues);
   const { updateTransactionEventFragment } = useTransactionEventFragment();
   const { editGasMode } = useGasFeeContext();

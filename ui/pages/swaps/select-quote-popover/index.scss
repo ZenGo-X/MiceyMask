@@ -9,7 +9,7 @@
   &__popover-wrap {
     height: 100%;
 
-    @include screen-sm-min {
+    @media screen and (min-width: $break-large) {
       height: 620px;
       width: 348px;
     }
@@ -31,7 +31,7 @@
     background: var(--color-background-alternative);
     opacity: 1;
 
-    @include screen-sm-min {
+    @media screen and (min-width: $break-large) {
       opacity: 0.5;
     }
   }

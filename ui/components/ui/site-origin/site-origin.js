@@ -11,7 +11,6 @@ export default function SiteOrigin({
   chip,
   className,
   title,
-  rightIcon,
 }) {
   return (
     <div className={classnames('site-origin', className)} title={title}>
@@ -22,7 +21,6 @@ export default function SiteOrigin({
           leftIcon={
             <IconWithFallback icon={iconSrc} name={iconName} size={32} />
           }
-          rightIcon={rightIcon}
         />
       ) : (
         <span>{siteOrigin}</span>
@@ -59,8 +57,4 @@ SiteOrigin.propTypes = {
    * if false iconSrc and iconName props will not be used.
    */
   chip: PropTypes.bool,
-  /**
-   * The icon to display on the right side of the chip.
-   */
-  rightIcon: PropTypes.node,
 };

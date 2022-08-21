@@ -6,9 +6,7 @@ import { ERC20 } from '../../../../shared/constants/transaction';
 import ConfirmApproveContent from '.';
 
 const renderComponent = (props) => {
-  const store = configureMockStore([])({
-    metamask: { provider: { chainId: '0x0' } },
-  });
+  const store = configureMockStore([])({ metamask: {} });
   return renderWithProvider(<ConfirmApproveContent {...props} />, store);
 };
 
@@ -24,7 +22,8 @@ const props = {
   tokenBalance: '15',
   showCustomizeGasModal: jest.fn(),
   showEditApprovalPermissionModal: jest.fn(),
-  data: '0x095ea7b30000000000000000000000009bc5baf874d2da8d216ae9f137804184ee5afef40000000000000000000000000000000000000000000000000000000000011170',
+  data:
+    '0x095ea7b30000000000000000000000009bc5baf874d2da8d216ae9f137804184ee5afef40000000000000000000000000000000000000000000000000000000000011170',
   toAddress: '0x9bc5baf874d2da8d216ae9f137804184ee5afef4',
   currentCurrency: 'TST',
   nativeCurrency: 'ETH',
@@ -41,12 +40,11 @@ const props = {
 
 describe('ConfirmApproveContent Component', () => {
   it('should render Confirm approve page correctly', () => {
-    const { queryByText, getByText, getAllByText, getByTestId } =
-      renderComponent(props);
+    const { queryByText, getByText, getAllByText } = renderComponent(props);
     expect(queryByText('metamask.github.io')).toBeInTheDocument();
-    expect(getByTestId('confirm-approve-title').textContent).toStrictEqual(
-      ' Give permission to access your TST? ',
-    );
+    expect(
+      queryByText('Give permission to access your TST?'),
+    ).toBeInTheDocument();
     expect(
       queryByText(
         'By granting permission, you are allowing the following contract to access your funds',
@@ -55,8 +53,8 @@ describe('ConfirmApproveContent Component', () => {
     expect(queryByText('0x9bc5...fef4')).toBeInTheDocument();
     expect(queryByText('Hide full transaction details')).toBeInTheDocument();
 
-    expect(queryByText('Edit permission')).toBeInTheDocument();
-    const editPermission = getByText('Edit permission');
+    expect(queryByText('Edit Permission')).toBeInTheDocument();
+    const editPermission = getByText('Edit Permission');
     fireEvent.click(editPermission);
     expect(props.showEditApprovalPermissionModal).toHaveBeenCalledTimes(1);
 

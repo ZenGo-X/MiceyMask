@@ -27,12 +27,7 @@ const sortingBasedOnTokenSelection = (tokensDetected) => {
       // create a new object with keys 'selected', 'deselected' and group the tokens
       .groupBy((token) => (token.selected ? 'selected' : 'deselected'))
       // ditch the 'selected' property and get just the tokens'
-      .mapValues((group) =>
-        group.map(({ token }) => {
-          const { address, symbol, decimals, aggregators } = token;
-          return { address, symbol, decimals, aggregators };
-        }),
-      )
+      .mapValues((group) => group.map(({ token }) => token))
       // Exit the chain and get the underlying value, an object.
       .value()
   );
@@ -50,10 +45,10 @@ const DetectedToken = ({ setShowDetectedTokens }) => {
       return tokenObj;
     }, {}),
   );
-  const [showDetectedTokenIgnoredPopover, setShowDetectedTokenIgnoredPopover] =
-    useState(false);
-  const [partiallyIgnoreDetectedTokens, setPartiallyIgnoreDetectedTokens] =
-    useState(false);
+  const [
+    showDetectedTokenIgnoredPopover,
+    setShowDetectedTokenIgnoredPopover,
+  ] = useState(false);
 
   const importSelectedTokens = async (selectedTokens) => {
     selectedTokens.forEach((importedToken) => {
@@ -76,8 +71,10 @@ const DetectedToken = ({ setShowDetectedTokens }) => {
   };
 
   const handleClearTokensSelection = async () => {
-    const { selected: selectedTokens = [], deselected: deSelectedTokens = [] } =
-      sortingBasedOnTokenSelection(tokensListDetected);
+    const {
+      selected: selectedTokens = [],
+      deselected: deSelectedTokens = [],
+    } = sortingBasedOnTokenSelection(tokensListDetected);
 
     if (deSelectedTokens.length < detectedTokens.length) {
       await importSelectedTokens(selectedTokens);
@@ -105,7 +102,6 @@ const DetectedToken = ({ setShowDetectedTokens }) => {
       }),
     );
     setShowDetectedTokens(false);
-    setPartiallyIgnoreDetectedTokens(false);
   };
 
   const handleTokenSelection = (token) => {
@@ -119,12 +115,12 @@ const DetectedToken = ({ setShowDetectedTokens }) => {
   };
 
   const onImport = async () => {
-    const { selected: selectedTokens = [] } =
-      sortingBasedOnTokenSelection(tokensListDetected);
+    const { selected: selectedTokens = [] } = sortingBasedOnTokenSelection(
+      tokensListDetected,
+    );
 
     if (selectedTokens.length < detectedTokens.length) {
       setShowDetectedTokenIgnoredPopover(true);
-      setPartiallyIgnoreDetectedTokens(true);
     } else {
       await importSelectedTokens(selectedTokens);
       setShowDetectedTokens(false);
@@ -143,7 +139,6 @@ const DetectedToken = ({ setShowDetectedTokens }) => {
 
   const onCancelIgnore = () => {
     setShowDetectedTokenIgnoredPopover(false);
-    setPartiallyIgnoreDetectedTokens(false);
   };
 
   return (
@@ -152,7 +147,6 @@ const DetectedToken = ({ setShowDetectedTokens }) => {
         <DetectedTokenIgnoredPopover
           onCancelIgnore={onCancelIgnore}
           handleClearTokensSelection={handleClearTokensSelection}
-          partiallyIgnoreDetectedTokens={partiallyIgnoreDetectedTokens}
         />
       )}
       <DetectedTokenSelectionPopover

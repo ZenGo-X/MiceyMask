@@ -21,7 +21,7 @@
     border: 1px solid var(--color-border-muted);
     border-radius: 24px;
 
-    @include screen-sm-min {
+    @media screen and (min-width: $break-large) {
       margin: 64px auto 40px;
       padding: 32px;
     }

@@ -14,7 +14,7 @@
     display: none;
   }
 
-  @include screen-sm-min {
+  @media screen and (min-width: $break-large) {
     position: absolute;
   }
 

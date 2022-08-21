@@ -10,7 +10,6 @@ import ChooseAccount from './choose-account';
 import PermissionsRedirect from './redirect';
 ///: BEGIN:ONLY_INCLUDE_IN(flask)
 import SnapInstall from './flask/snap-install';
-import SnapUpdate from './flask/snap-update';
 ///: END:ONLY_INCLUDE_IN
 
 const APPROVE_TIMEOUT = MILLISECOND * 1200;
@@ -36,7 +35,6 @@ export default class PermissionConnect extends Component {
     confirmPermissionPath: PropTypes.string.isRequired,
     ///: BEGIN:ONLY_INCLUDE_IN(flask)
     snapInstallPath: PropTypes.string.isRequired,
-    snapUpdatePath: PropTypes.string.isRequired,
     isSnap: PropTypes.bool.isRequired,
     ///: END:ONLY_INCLUDE_IN
     totalPages: PropTypes.string.isRequired,
@@ -92,7 +90,6 @@ export default class PermissionConnect extends Component {
       confirmPermissionPath,
       ///: BEGIN:ONLY_INCLUDE_IN(flask)
       snapInstallPath,
-      snapUpdatePath,
       isSnap,
       ///: END:ONLY_INCLUDE_IN
       getCurrentWindowTab,
@@ -117,9 +114,7 @@ export default class PermissionConnect extends Component {
     if (history.location.pathname === connectPath && !isRequestingAccounts) {
       ///: BEGIN:ONLY_INCLUDE_IN(flask)
       if (isSnap) {
-        history.push(
-          permissionsRequest.newPermissions ? snapUpdatePath : snapInstallPath,
-        );
+        history.push(snapInstallPath);
       } else {
         ///: END:ONLY_INCLUDE_IN
         history.push(confirmPermissionPath);
@@ -234,7 +229,6 @@ export default class PermissionConnect extends Component {
       confirmPermissionPath,
       ///: BEGIN:ONLY_INCLUDE_IN(flask)
       snapInstallPath,
-      snapUpdatePath,
       ///: END:ONLY_INCLUDE_IN
     } = this.props;
     const {
@@ -310,29 +304,6 @@ export default class PermissionConnect extends Component {
                     this.redirect(true);
                   }}
                   rejectSnapInstall={(requestId) =>
-                    this.cancelPermissionsRequest(requestId)
-                  }
-                  targetSubjectMetadata={targetSubjectMetadata}
-                />
-              )}
-            />
-            {
-              ///: END:ONLY_INCLUDE_IN
-            }
-            {
-              ///: BEGIN:ONLY_INCLUDE_IN(flask)
-            }
-            <Route
-              path={snapUpdatePath}
-              exact
-              render={() => (
-                <SnapUpdate
-                  request={permissionsRequest || {}}
-                  approveSnapUpdate={(...args) => {
-                    approvePermissionsRequest(...args);
-                    this.redirect(true);
-                  }}
-                  rejectSnapUpdate={(requestId) =>
                     this.cancelPermissionsRequest(requestId)
                   }
                   targetSubjectMetadata={targetSubjectMetadata}

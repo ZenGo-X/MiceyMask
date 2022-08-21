@@ -2,11 +2,11 @@
   &__sections {
     display: flex;
 
-    @include screen-sm-min {
+    @media screen and (min-width: $break-large) {
       flex-direction: row;
     }
 
-    @include screen-md-max {
+    @media screen and (max-width: 970px) {
       flex-direction: column;
     }
   }
@@ -20,7 +20,7 @@
     flex: 1;
     min-width: 0;
 
-    @include screen-md-max {
+    @media screen and (max-width: 970px) {
       margin-top: 24px;
     }
   }
@@ -28,7 +28,7 @@
   video {
     border-radius: 8px;
 
-    @include screen-md-max {
+    @media screen and (max-width: 970px) {
       width: 95%;
     }
   }

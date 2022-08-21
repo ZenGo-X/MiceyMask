@@ -1,10 +1,11 @@
 import React from 'react';
 import sinon from 'sinon';
-import { fireEvent, screen } from '@testing-library/react';
-import { renderWithProvider } from '../../../../test/lib/render-helpers';
+import { mountWithRouter } from '../../../../test/lib/render-helpers';
 import SelectAction from './select-action.container';
 
 describe('Selection Action', () => {
+  let wrapper;
+
   const props = {
     isInitialized: false,
     setFirstTimeFlowType: sinon.spy(),
@@ -14,7 +15,7 @@ describe('Selection Action', () => {
   };
 
   beforeEach(() => {
-    renderWithProvider(<SelectAction.WrappedComponent {...props} />);
+    wrapper = mountWithRouter(<SelectAction.WrappedComponent {...props} />);
   });
 
   afterEach(() => {
@@ -23,8 +24,10 @@ describe('Selection Action', () => {
   });
 
   it('clicks import wallet to route to import FTF', () => {
-    const importButton = screen.getByTestId('import-wallet-button');
-    fireEvent.click(importButton);
+    const importWalletButton = wrapper
+      .find('.btn-primary.first-time-flow__button')
+      .at(0);
+    importWalletButton.simulate('click');
 
     expect(props.setFirstTimeFlowType.calledOnce).toStrictEqual(true);
     expect(props.setFirstTimeFlowType.getCall(0).args[0]).toStrictEqual(
@@ -34,8 +37,10 @@ describe('Selection Action', () => {
   });
 
   it('clicks create wallet to route to create FTF', () => {
-    const importButton = screen.getByTestId('create-wallet-button');
-    fireEvent.click(importButton);
+    const createWalletButton = wrapper
+      .find('.btn-primary.first-time-flow__button')
+      .at(1);
+    createWalletButton.simulate('click');
 
     expect(props.setFirstTimeFlowType.calledOnce).toStrictEqual(true);
     expect(props.setFirstTimeFlowType.getCall(0).args[0]).toStrictEqual(

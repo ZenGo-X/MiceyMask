@@ -5,7 +5,6 @@ import classnames from 'classnames';
 import { requestRevealSeedWords } from '../../store/actions';
 import ExportTextContainer from '../../components/ui/export-text-container';
 import { getMostRecentOverviewPage } from '../../ducks/history/history';
-import { EVENT, EVENT_NAMES } from '../../../shared/constants/metametrics';
 
 import Button from '../../components/ui/button';
 
@@ -32,27 +31,10 @@ class RevealSeedPage extends Component {
     this.setState({ seedWords: null, error: null });
     this.props
       .requestRevealSeedWords(this.state.password)
-      .then((seedWords) => {
-        this.context.trackEvent({
-          category: EVENT.CATEGORIES.KEYS,
-          event: EVENT_NAMES.KEY_EXPORT_REVEALED,
-          properties: {
-            key_type: EVENT.KEY_TYPES.SRP,
-          },
-        });
-        this.setState({ seedWords, screen: REVEAL_SEED_SCREEN });
-      })
-      .catch((error) => {
-        this.context.trackEvent({
-          category: EVENT.CATEGORIES.KEYS,
-          event: EVENT_NAMES.KEY_EXPORT_FAILED,
-          properties: {
-            key_type: EVENT.KEY_TYPES.SRP,
-            reason: error.message, // 'incorrect_password',
-          },
-        });
-        this.setState({ error: error.message });
-      });
+      .then((seedWords) =>
+        this.setState({ seedWords, screen: REVEAL_SEED_SCREEN }),
+      )
+      .catch((error) => this.setState({ error: error.message }));
   }
 
   renderWarning() {
@@ -105,36 +87,14 @@ class RevealSeedPage extends Component {
   }
 
   renderRevealSeedContent() {
-    const { t, trackEvent } = this.context;
+    const { t } = this.context;
 
     return (
       <div>
         <label className="reveal-seed__label">
           {t('yourPrivateSeedPhrase')}
         </label>
-        <ExportTextContainer
-          text={this.state.seedWords}
-          onClickCopy={() => {
-            trackEvent({
-              category: EVENT.CATEGORIES.KEYS,
-              event: EVENT_NAMES.KEY_EXPORT_COPIED,
-              properties: {
-                key_type: EVENT.KEY_TYPES.SRP,
-                copy_method: 'clipboard',
-              },
-            });
-          }}
-          onClickDownload={() => {
-            trackEvent({
-              category: EVENT.CATEGORIES.KEYS,
-              event: EVENT_NAMES.KEY_EXPORT_COPIED,
-              properties: {
-                key_type: EVENT.KEY_TYPES.SRP,
-                copy_method: 'file_download',
-              },
-            });
-          }}
-        />
+        <ExportTextContainer text={this.state.seedWords} />
       </div>
     );
   }
@@ -153,16 +113,9 @@ class RevealSeedPage extends Component {
             type="secondary"
             large
             className="page-container__footer-button"
-            onClick={() => {
-              this.context.trackEvent({
-                category: EVENT.CATEGORIES.KEYS,
-                event: EVENT_NAMES.KEY_EXPORT_CANCELED,
-                properties: {
-                  key_type: EVENT.KEY_TYPES.SRP,
-                },
-              });
-              this.props.history.push(this.props.mostRecentOverviewPage);
-            }}
+            onClick={() =>
+              this.props.history.push(this.props.mostRecentOverviewPage)
+            }
           >
             {this.context.t('cancel')}
           </Button>
@@ -170,16 +123,7 @@ class RevealSeedPage extends Component {
             type="primary"
             large
             className="page-container__footer-button"
-            onClick={(event) => {
-              this.context.trackEvent({
-                category: EVENT.CATEGORIES.KEYS,
-                event: EVENT_NAMES.KEY_EXPORT_REQUESTED,
-                properties: {
-                  key_type: EVENT.KEY_TYPES.SRP,
-                },
-              });
-              this.handleSubmit(event);
-            }}
+            onClick={(event) => this.handleSubmit(event)}
             disabled={this.state.password === ''}
           >
             {this.context.t('next')}
@@ -235,7 +179,6 @@ RevealSeedPage.propTypes = {
 
 RevealSeedPage.contextTypes = {
   t: PropTypes.func,
-  trackEvent: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {

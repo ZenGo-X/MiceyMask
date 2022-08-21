@@ -9,7 +9,7 @@
   min-height: 116px;
   padding: 16px;
 
-  @include screen-sm-min {
+  @media screen and (min-width: $break-large) {
     min-width: 472px;
   }
 
@@ -45,7 +45,7 @@
     flex-direction: row;
     align-items: center;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       width: 160px;
     }
   }

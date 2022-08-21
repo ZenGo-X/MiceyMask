@@ -5,9 +5,6 @@ import {
   activeTabHasPermissions,
   getCurrentEthBalance,
   getFirstPermissionRequest,
-  ///: BEGIN:ONLY_INCLUDE_IN(flask)
-  getFirstSnapUpdateRequest,
-  ///: END:ONLY_INCLUDE_IN
   getIsMainnet,
   getOriginOfCurrentTab,
   getTotalUnapprovedCount,
@@ -89,18 +86,9 @@ const mapStateToProps = (state) => {
   const isPopup = envType === ENVIRONMENT_TYPE_POPUP;
   const isNotification = envType === ENVIRONMENT_TYPE_NOTIFICATION;
 
-  let firstPermissionsRequest, firstPermissionsRequestId;
-  firstPermissionsRequest = getFirstPermissionRequest(state);
-  firstPermissionsRequestId = firstPermissionsRequest?.metadata.id || null;
-
-  // getFirstPermissionRequest should be updated with snap update logic once we hit main extension release
-
-  ///: BEGIN:ONLY_INCLUDE_IN(flask)
-  if (!firstPermissionsRequest) {
-    firstPermissionsRequest = getFirstSnapUpdateRequest(state);
-    firstPermissionsRequestId = firstPermissionsRequest?.metadata.id || null;
-  }
-  ///: END:ONLY_INCLUDE_IN
+  const firstPermissionsRequest = getFirstPermissionRequest(state);
+  const firstPermissionsRequestId =
+    firstPermissionsRequest?.metadata.id || null;
 
   const originOfCurrentTab = getOriginOfCurrentTab(state);
   const shouldShowWeb3ShimUsageNotification =

@@ -6,9 +6,7 @@ import {
   TEXT_ALIGN,
   TYPOGRAPHY,
   OVERFLOW_WRAP,
-  DISPLAY,
 } from '../../../helpers/constants/design-system';
-import Box from '../box';
 
 import { ValidColors, ValidTags } from './typography';
 
@@ -51,7 +49,7 @@ export default {
       control: { type: 'select' },
       options: Object.values(OVERFLOW_WRAP),
     },
-    as: {
+    tag: {
       control: { type: 'select' },
       options: ValidTags,
     },
@@ -79,6 +77,9 @@ function renderBackgroundColor(color) {
       break;
     case COLORS.PRIMARY_INVERSE:
       bgColor = COLORS.PRIMARY_DEFAULT;
+      break;
+    case COLORS.SECONDARY_INVERSE:
+      bgColor = COLORS.SECONDARY_DEFAULT;
       break;
     case COLORS.ERROR_INVERSE:
       bgColor = COLORS.ERROR_DEFAULT;
@@ -248,27 +249,18 @@ export const OverflowWrap = (args) => (
   </div>
 );
 
-export const As = (args) => (
+export const Tag = (args) => (
   <>
-    <Typography boxProps={{ display: DISPLAY.BLOCK }} marginBottom={4}>
-      You can change the root element of the Typography component using the as
-      prop. Inspect the below elements to see the underlying HTML elements
-    </Typography>
-    <Box gap={4}>
-      {Object.values(ValidTags).map((as) => (
-        <Typography
-          {...args}
-          as={as}
-          key={as}
-          boxProps={{
-            backgroundColor: renderBackgroundColor(args.color),
-            display: DISPLAY.BLOCK,
-          }}
-        >
-          {as}
-        </Typography>
-      ))}
-    </Box>
+    {Object.values(ValidTags).map((tag) => (
+      <Typography
+        boxProps={{ backgroundColor: renderBackgroundColor(args.color) }}
+        {...args}
+        tag={tag}
+        key={tag}
+      >
+        {tag}
+      </Typography>
+    ))}
   </>
 );
 

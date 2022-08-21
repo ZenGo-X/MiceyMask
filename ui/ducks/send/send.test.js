@@ -1139,39 +1139,12 @@ describe('Send Slice', () => {
           action.payload.account.address,
         );
       });
-
-      it('should gracefully handle missing account in payload', () => {
-        const olderState = {
-          ...INITIAL_SEND_STATE_FOR_EXISTING_DRAFT,
-          selectedAccount: {
-            balance: '0x0',
-            address: '0xAddress',
-          },
-        };
-
-        const action = {
-          type: 'SELECTED_ACCOUNT_CHANGED',
-          payload: {
-            account: undefined,
-          },
-        };
-
-        const result = sendReducer(olderState, action);
-
-        expect(result.selectedAccount.balance).toStrictEqual('0x0');
-        expect(result.selectedAccount.address).toStrictEqual('0xAddress');
-      });
     });
 
     describe('Account Changed', () => {
-      it('should correctly update the fromAccount in an edit', () => {
+      it('should', () => {
         const accountsChangedState = {
-          ...getInitialSendStateWithExistingTxState({
-            fromAccount: {
-              address: '0xAddress',
-              balance: '0x0',
-            },
-          }),
+          ...INITIAL_SEND_STATE_FOR_EXISTING_DRAFT,
           stage: SEND_STAGES.EDIT,
           selectedAccount: {
             address: '0xAddress',
@@ -1191,40 +1164,9 @@ describe('Send Slice', () => {
 
         const result = sendReducer(accountsChangedState, action);
 
-        const draft = getTestUUIDTx(result);
-
-        expect(draft.fromAccount.balance).toStrictEqual(
+        expect(result.selectedAccount.balance).toStrictEqual(
           action.payload.account.balance,
         );
-      });
-
-      it('should gracefully handle missing account param in payload', () => {
-        const accountsChangedState = {
-          ...getInitialSendStateWithExistingTxState({
-            fromAccount: {
-              address: '0xAddress',
-              balance: '0x0',
-            },
-          }),
-          stage: SEND_STAGES.EDIT,
-          selectedAccount: {
-            address: '0xAddress',
-            balance: '0x0',
-          },
-        };
-
-        const action = {
-          type: 'ACCOUNT_CHANGED',
-          payload: {
-            account: undefined,
-          },
-        };
-
-        const result = sendReducer(accountsChangedState, action);
-
-        const draft = getTestUUIDTx(result);
-
-        expect(draft.fromAccount.balance).toStrictEqual('0x0');
       });
 
       it(`should not edit account balance if action payload address is not the same as state's address`, () => {
@@ -1410,7 +1352,6 @@ describe('Send Slice', () => {
             type: 'send/updateGasFees',
             payload: {
               gasPrice: '0x0',
-              manuallyEdited: true,
               transactionType: TRANSACTION_ENVELOPE_TYPES.LEGACY,
             },
           },
@@ -2454,7 +2395,6 @@ describe('Send Slice', () => {
               gasLimit: GAS_LIMITS.SIMPLE,
               gasPrice: '0x3b9aca00',
               gasTotal: '0x0',
-              wasManuallyEdited: false,
               maxFeePerGas: '0x0',
               maxPriorityFeePerGas: '0x0',
             },
@@ -2466,7 +2406,6 @@ describe('Send Slice', () => {
               nickname: '',
               warning: null,
               recipientWarningAcknowledged: false,
-              type: '',
             },
             status: SEND_STATUSES.VALID,
             transactionType: '0x0',
@@ -2599,7 +2538,6 @@ describe('Send Slice', () => {
               gasLimit: GAS_LIMITS.BASE_TOKEN_ESTIMATE,
               gasPrice: '0x3b9aca00',
               gasTotal: '0x0',
-              wasManuallyEdited: false,
               maxFeePerGas: '0x0',
               maxPriorityFeePerGas: '0x0',
             },
@@ -2610,7 +2548,6 @@ describe('Send Slice', () => {
               error: null,
               nickname: '',
               warning: null,
-              type: '',
               recipientWarningAcknowledged: false,
             },
             status: SEND_STATUSES.VALID,
@@ -2789,7 +2726,6 @@ describe('Send Slice', () => {
             error: null,
             gasLimit: '0x186a0',
             gasPrice: '0x3b9aca00',
-            wasManuallyEdited: false,
             gasTotal: '0x0',
             maxFeePerGas: '0x0',
             maxPriorityFeePerGas: '0x0',
@@ -2801,7 +2737,6 @@ describe('Send Slice', () => {
             error: null,
             warning: null,
             nickname: '',
-            type: '',
             recipientWarningAcknowledged: false,
           },
           status: SEND_STATUSES.VALID,

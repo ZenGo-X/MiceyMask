@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { useI18nContext } from '../../../../hooks/useI18nContext';
 
 import Popover from '../../../ui/popover';
@@ -9,7 +8,6 @@ import Typography from '../../../ui/typography/typography';
 import { TYPOGRAPHY } from '../../../../helpers/constants/design-system';
 
 const DetectedTokenIgnoredPopover = ({
-  partiallyIgnoreDetectedTokens,
   onCancelIgnore,
   handleClearTokensSelection,
 }) => {
@@ -36,16 +34,8 @@ const DetectedTokenIgnoredPopover = ({
 
   return (
     <Popover
-      title={
-        partiallyIgnoreDetectedTokens
-          ? t('importSelectedTokens')
-          : t('areYouSure')
-      }
-      className={classNames('detected-token-ignored-popover', {
-        'detected-token-ignored-popover--import': partiallyIgnoreDetectedTokens,
-        'detected-token-ignored-popover--ignore':
-          !partiallyIgnoreDetectedTokens,
-      })}
+      title={t('areYouSure')}
+      className="detected-token-ignored-popover"
       footer={footer}
     >
       <Typography
@@ -56,16 +46,13 @@ const DetectedTokenIgnoredPopover = ({
         marginBottom={7}
         marginLeft={5}
       >
-        {partiallyIgnoreDetectedTokens
-          ? t('importSelectedTokensDescription')
-          : t('ignoreTokenWarning')}
+        {t('ignoreTokenWarning')}
       </Typography>
     </Popover>
   );
 };
 
 DetectedTokenIgnoredPopover.propTypes = {
-  partiallyIgnoreDetectedTokens: PropTypes.bool.isRequired,
   onCancelIgnore: PropTypes.func.isRequired,
   handleClearTokensSelection: PropTypes.func.isRequired,
 };

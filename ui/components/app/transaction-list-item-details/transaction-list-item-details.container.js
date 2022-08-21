@@ -1,11 +1,7 @@
 import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { withRouter } from 'react-router-dom';
 import { tryReverseResolveAddress } from '../../../store/actions';
 import {
   getAddressBook,
-  getBlockExplorerLinkText,
-  getIsCustomNetwork,
   getRpcPrefsForCurrentProvider,
   getEnsResolutionByAddress,
 } from '../../../selectors';
@@ -29,15 +25,11 @@ const mapStateToProps = (state, ownProps) => {
   };
   const rpcPrefs = getRpcPrefsForCurrentProvider(state);
 
-  const isCustomNetwork = getIsCustomNetwork(state);
-
   return {
     rpcPrefs,
     recipientEns,
     senderNickname: getNickName(senderAddress),
     recipientNickname: recipientAddress ? getNickName(recipientAddress) : null,
-    isCustomNetwork,
-    blockExplorerLinkText: getBlockExplorerLinkText(state),
   };
 };
 
@@ -49,7 +41,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default compose(
-  withRouter,
-  connect(mapStateToProps, mapDispatchToProps),
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
 )(TransactionListItemDetails);

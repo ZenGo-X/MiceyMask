@@ -1,5 +1,4 @@
 import React from 'react';
-import InfoIcon from '../icon/info-icon.component';
 
 import SiteOrigin from '.';
 
@@ -36,13 +35,4 @@ DefaultStory.args = {
   iconName: 'MetaMask',
   iconSrc: './metamark.svg',
   chip: true,
-};
-
-export const RightIcon = (args) => <SiteOrigin {...args} />;
-
-RightIcon.args = {
-  siteOrigin: 'https://metamask.io',
-  iconName: 'MetaMask',
-  iconSrc: './metamark.svg',
-  rightIcon: <InfoIcon />,
 };

@@ -8,6 +8,7 @@ export default {
   argTypes: {
     warning: { control: 'text' },
     useNonceField: { control: 'boolean' },
+    advancedInlineMicey: { control: 'boolean' },
     sendHexData: { control: 'boolean' },
     advancedInlineGas: { control: 'boolean' },
     showFiatInTestnets: { control: 'boolean' },
@@ -31,6 +32,9 @@ export default {
     showResetAccountConfirmationModal: {
       action: 'showResetAccountConfirmationModal',
     },
+    setAdvancedInlineMiceyFeatureFlag: {
+      action: 'setAdvancedInlineMiceyFeatureFlag',
+    },
     setAdvancedInlineGasFeatureFlag: {
       action: 'setAdvancedInlineGasFeatureFlag',
     },
@@ -41,6 +45,7 @@ export const DefaultStory = (args) => {
   const [
     {
       useNonceField,
+      advancedInlineMicey,
       sendHexData,
       advancedInlineGas,
       showFiatInTestnets,
@@ -68,6 +73,12 @@ export const DefaultStory = (args) => {
     });
   };
 
+  const handleAdvancedInlineMicey = () => {
+    updateArgs({
+      advancedInlineMicey: !advancedInlineMicey,
+    });
+  };
+
   const handleShowFiatInTestnets = () => {
     updateArgs({
       showFiatInTestnets: !showFiatInTestnets,
@@ -91,6 +102,8 @@ export const DefaultStory = (args) => {
         {...args}
         useNonceField={useNonceField}
         setUseNonceField={handleUseNonceField}
+        advancedInlineMicey={advancedInlineMicey}
+        setAdvancedInlineMiceyFeatureFlag={handleAdvancedInlineMicey}
         sendHexData={sendHexData}
         setHexDataFeatureFlag={handleSendHexData}
         advancedInlineGas={advancedInlineGas}
@@ -113,6 +126,7 @@ DefaultStory.args = {
   useNonceField: false,
   sendHexData: false,
   advancedInlineGas: false,
+  advancedInlineMicey: false,
   showFiatInTestnets: false,
   threeBoxSyncingAllowed: false,
   threeBoxDisabled: false,

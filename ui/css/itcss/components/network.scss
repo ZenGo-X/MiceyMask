@@ -64,15 +64,15 @@
     margin: 0 14px 0 4px;
   }
 
-  @include screen-sm-min {
+  @media screen and (min-width: $break-large) {
     right: calc(((100% - 85vw) / 2) + 2px);
   }
 
-  @include screen-md-min {
+  @media screen and (min-width: 769px) {
     right: calc(((100% - 80vw) / 2) + 2px);
   }
 
-  @include screen-lg-min {
+  @media screen and (min-width: 1281px) {
     right: calc(((100% - 65vw) / 2) + 2px);
   }
 }

@@ -34,8 +34,12 @@ export default function TokenDetailsPage() {
   const tokenList = useSelector(getTokenList);
 
   const { address: tokenAddress } = useParams();
-  const tokenMetadata = tokenList[tokenAddress.toLowerCase()];
+  const tokenMetadata = Object.values(tokenList).find((token) =>
+    isEqualCaseInsensitive(token.address, tokenAddress),
+  );
   const aggregators = tokenMetadata?.aggregators?.join(', ');
+  const fileName = tokenMetadata?.iconUrl;
+  const imagePath = fileName;
 
   const token = tokens.find(({ address }) =>
     isEqualCaseInsensitive(address, tokenAddress),
@@ -95,7 +99,7 @@ export default function TokenDetailsPage() {
             <Identicon
               diameter={32}
               address={token.address}
-              image={tokenMetadata ? tokenMetadata.iconUrl : token.image}
+              image={tokenMetadata ? imagePath : token.image}
             />
           </Box>
         </Box>
@@ -179,7 +183,7 @@ export default function TokenDetailsPage() {
             ? networkNickname ?? t('privateNetwork')
             : t(networkType)}
         </Typography>
-        {aggregators && (
+        {process.env.TOKEN_DETECTION_V2 && aggregators && (
           <>
             <Typography
               variant={TYPOGRAPHY.H9}

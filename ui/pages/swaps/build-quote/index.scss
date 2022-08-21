@@ -141,7 +141,7 @@
   &__open-to-dropdown {
     max-height: 194px;
 
-    @include screen-sm-min {
+    @media screen and (min-width: $break-large) {
       max-height: 276px;
     }
   }

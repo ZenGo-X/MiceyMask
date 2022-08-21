@@ -1,7 +1,7 @@
 import React from 'react';
 import sinon from 'sinon';
-import { renderWithProvider } from '../../../test/lib/render-helpers';
-import Lock from './lock.component';
+import { mountWithRouter } from '../../../test/lib/render-helpers';
+import Lock from './lock.container';
 
 describe('Lock', () => {
   it('replaces history with default route when isUnlocked false', () => {
@@ -12,7 +12,7 @@ describe('Lock', () => {
       },
     };
 
-    renderWithProvider(<Lock {...props} />);
+    mountWithRouter(<Lock.WrappedComponent {...props} />);
 
     expect(props.history.replace.getCall(0).args[0]).toStrictEqual('/');
   });
@@ -28,7 +28,7 @@ describe('Lock', () => {
 
     props.lockMetamask.resolves();
 
-    renderWithProvider(<Lock {...props} />);
+    mountWithRouter(<Lock.WrappedComponent {...props} />);
 
     expect(await props.lockMetamask.calledOnce).toStrictEqual(true);
     expect(props.history.push.getCall(0).args[0]).toStrictEqual('/');

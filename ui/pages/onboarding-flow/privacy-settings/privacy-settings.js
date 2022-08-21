@@ -24,8 +24,9 @@ export default function PrivacySettings() {
   const history = useHistory();
   const [usePhishingDetection, setUsePhishingDetection] = useState(true);
   const [turnOnTokenDetection, setTurnOnTokenDetection] = useState(true);
-  const [showIncomingTransactions, setShowIncomingTransactions] =
-    useState(true);
+  const [showIncomingTransactions, setShowIncomingTransactions] = useState(
+    true,
+  );
 
   const handleSubmit = () => {
     dispatch(

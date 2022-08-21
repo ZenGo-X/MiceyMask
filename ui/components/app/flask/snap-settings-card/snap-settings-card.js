@@ -161,7 +161,7 @@ const SnapSettingsCard = ({
                 color={COLORS.TEXT_MUTED}
                 variant={TYPOGRAPHY.H8}
                 fontWeight={FONT_WEIGHT.NORMAL}
-                as="span"
+                tag="span"
                 className="snap-settings-card__date-added"
               >
                 {`${
@@ -177,7 +177,7 @@ const SnapSettingsCard = ({
                 variant={TYPOGRAPHY.H7}
                 fontWeight={FONT_WEIGHT.NORMAL}
                 align={TEXT_ALIGN.CENTER}
-                as="span"
+                tag="span"
                 className="snap-settings-card__version"
               >
                 {t('shorthandVersion', [version])}

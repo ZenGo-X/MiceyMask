@@ -4,6 +4,7 @@
 @import 'end-of-flow/index';
 @import 'metametrics-opt-in/index';
 
+
 .first-time-flow {
   width: 100%;
   background-color: var(--color-background-default);
@@ -11,7 +12,7 @@
   justify-content: center;
 
   &__wrapper {
-    @include screen-sm-min {
+    @media screen and (min-width: $break-large) {
       max-width: 742px;
       display: flex;
       flex-direction: column;
@@ -22,7 +23,7 @@
     .app-header__metafox-logo {
       margin-bottom: 40px;
 
-      @include screen-sm-max {
+      @media screen and (max-width: $break-small) {
         margin-bottom: 0;
       }
     }
@@ -53,7 +54,7 @@
     margin-bottom: 24px;
     color: var(--color-text-default);
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       @include H6;
 
       margin-bottom: 16px;
@@ -104,9 +105,11 @@
 }
 
 .first-time-flow__wrapper.intro {
-  padding: 0 20px;
-
-  @include screen-sm-min {
+  @media screen and (min-width: $break-large) {
     max-width: 1010px;
+  }
+
+  @media screen and (max-width: 1010px) {
+    padding: 0 20px;
   }
 }

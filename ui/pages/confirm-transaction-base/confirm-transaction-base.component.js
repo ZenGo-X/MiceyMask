@@ -116,9 +116,6 @@ export default class ConfirmTransactionBase extends Component {
     hideData: PropTypes.bool,
     hideSubtitle: PropTypes.bool,
     tokenAddress: PropTypes.string,
-    customTokenAmount: PropTypes.string,
-    dappProposedTokenAmount: PropTypes.string,
-    currentTokenBalance: PropTypes.string,
     onEdit: PropTypes.func,
     subtitleComponent: PropTypes.node,
     title: PropTypes.string,
@@ -807,9 +804,6 @@ export default class ConfirmTransactionBase extends Component {
       mostRecentOverviewPage,
       updateCustomNonce,
       maxFeePerGas,
-      customTokenAmount,
-      dappProposedTokenAmount,
-      currentTokenBalance,
       maxPriorityFeePerGas,
       baseFeePerGas,
       methodData,
@@ -827,22 +821,6 @@ export default class ConfirmTransactionBase extends Component {
 
     if (name) {
       txData.contractMethodName = name;
-    }
-
-    if (dappProposedTokenAmount) {
-      txData.dappProposedTokenAmount = dappProposedTokenAmount;
-      txData.originalApprovalAmount = dappProposedTokenAmount;
-    }
-
-    if (customTokenAmount) {
-      txData.customTokenAmount = customTokenAmount;
-      txData.finalApprovalAmount = customTokenAmount;
-    } else if (dappProposedTokenAmount !== undefined) {
-      txData.finalApprovalAmount = dappProposedTokenAmount;
-    }
-
-    if (currentTokenBalance) {
-      txData.currentTokenBalance = currentTokenBalance;
     }
 
     if (maxFeePerGas) {
@@ -892,15 +870,12 @@ export default class ConfirmTransactionBase extends Component {
   }
 
   renderTitleComponent() {
-    const { title, hexTransactionAmount, txData } = this.props;
+    const { title, hexTransactionAmount } = this.props;
 
     // Title string passed in by props takes priority
     if (title) {
       return null;
     }
-
-    const isContractInteraction =
-      txData.type === TRANSACTION_TYPES.CONTRACT_INTERACTION;
 
     return (
       <UserPreferencedCurrencyDisplay
@@ -908,8 +883,7 @@ export default class ConfirmTransactionBase extends Component {
         type={PRIMARY}
         showEthLogo
         ethLogoHeight={24}
-        hideLabel={!isContractInteraction}
-        showCurrencySuffix={isContractInteraction}
+        hideLabel
       />
     );
   }
@@ -1076,10 +1050,7 @@ export default class ConfirmTransactionBase extends Component {
     } = this.getNavigateTxData();
 
     let functionType;
-    if (
-      txData.type === TRANSACTION_TYPES.CONTRACT_INTERACTION &&
-      txData.origin !== 'metamask'
-    ) {
+    if (txData.type === TRANSACTION_TYPES.CONTRACT_INTERACTION) {
       functionType = getMethodName(name);
     }
 

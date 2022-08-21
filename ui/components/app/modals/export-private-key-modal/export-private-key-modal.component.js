@@ -7,15 +7,10 @@ import copyToClipboard from 'copy-to-clipboard';
 import Button from '../../../ui/button';
 import AccountModalContainer from '../account-modal-container';
 import { toChecksumHexAddress } from '../../../../../shared/modules/hexstring-utils';
-import {
-  EVENT,
-  EVENT_NAMES,
-} from '../../../../../shared/constants/metametrics';
 
 export default class ExportPrivateKeyModal extends Component {
   static contextTypes = {
     t: PropTypes.func,
-    trackEvent: PropTypes.func,
   };
 
   static defaultProps = {
@@ -49,32 +44,13 @@ export default class ExportPrivateKeyModal extends Component {
     const { exportAccount } = this.props;
 
     exportAccount(password, address)
-      .then((privateKey) => {
-        this.context.trackEvent({
-          category: EVENT.CATEGORIES.KEYS,
-          event: EVENT_NAMES.KEY_EXPORT_REVEALED,
-          properties: {
-            key_type: EVENT.KEY_TYPES.PKEY,
-          },
-        });
-
+      .then((privateKey) =>
         this.setState({
           privateKey,
           showWarning: false,
-        });
-      })
-      .catch((e) => {
-        this.context.trackEvent({
-          category: EVENT.CATEGORIES.KEYS,
-          event: EVENT_NAMES.KEY_EXPORT_FAILED,
-          properties: {
-            key_type: EVENT.KEY_TYPES.PKEY,
-            reason: 'incorrect_password',
-          },
-        });
-
-        log.error(e);
-      });
+        }),
+      )
+      .catch((e) => log.error(e));
   };
 
   renderPasswordLabel(privateKey) {
@@ -103,17 +79,7 @@ export default class ExportPrivateKeyModal extends Component {
     return (
       <div
         className="export-private-key-modal__private-key-display"
-        onClick={() => {
-          copyToClipboard(plainKey);
-          this.context.trackEvent({
-            category: EVENT.CATEGORIES.KEYS,
-            event: EVENT_NAMES.KEY_EXPORT_COPIED,
-            properties: {
-              key_type: EVENT.KEY_TYPES.PKEY,
-              copy_method: 'clipboard',
-            },
-          });
-        }}
+        onClick={() => copyToClipboard(plainKey)}
       >
         {plainKey}
       </div>
@@ -128,25 +94,14 @@ export default class ExportPrivateKeyModal extends Component {
             type="secondary"
             large
             className="export-private-key-modal__button export-private-key-modal__button--cancel"
-            onClick={() => {
-              this.context.trackEvent({
-                category: EVENT.CATEGORIES.KEYS,
-                event: EVENT_NAMES.KEY_EXPORT_CANCELED,
-                properties: {
-                  key_type: EVENT.KEY_TYPES.PKEY,
-                },
-              });
-              hideModal();
-            }}
+            onClick={() => hideModal()}
           >
             {this.context.t('cancel')}
           </Button>
         )}
         {privateKey ? (
           <Button
-            onClick={() => {
-              hideModal();
-            }}
+            onClick={() => hideModal()}
             type="primary"
             large
             className="export-private-key-modal__button"
@@ -155,17 +110,9 @@ export default class ExportPrivateKeyModal extends Component {
           </Button>
         ) : (
           <Button
-            onClick={() => {
-              this.context.trackEvent({
-                category: EVENT.CATEGORIES.KEYS,
-                event: EVENT_NAMES.KEY_EXPORT_REQUESTED,
-                properties: {
-                  key_type: EVENT.KEY_TYPES.PKEY,
-                },
-              });
-
-              this.exportAccountAndGetPrivateKey(this.state.password, address);
-            }}
+            onClick={() =>
+              this.exportAccountAndGetPrivateKey(this.state.password, address)
+            }
             type="primary"
             large
             className="export-private-key-modal__button"

@@ -125,8 +125,11 @@ export default class ConnectedAccountsList extends PureComponent {
   }
 
   render() {
-    const { connectedAccounts, selectedAddress, shouldRenderListOptions } =
-      this.props;
+    const {
+      connectedAccounts,
+      selectedAddress,
+      shouldRenderListOptions,
+    } = this.props;
     const { t } = this.context;
 
     return (

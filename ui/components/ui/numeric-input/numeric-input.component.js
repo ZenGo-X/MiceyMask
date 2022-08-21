@@ -47,7 +47,7 @@ export default function NumericInput({
         <Typography
           color={COLORS.TEXT_ALTERNATIVE}
           variant={TYPOGRAPHY.H7}
-          as="span"
+          tag="span"
         >
           {detailText}
         </Typography>

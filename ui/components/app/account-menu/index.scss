@@ -9,19 +9,19 @@
   min-width: 150px;
   color: var(--color-text-default);
 
-  @include screen-sm-max {
+  @media screen and (max-width: $break-small) {
     right: 16px;
   }
 
-  @include screen-sm-min {
+  @media screen and (min-width: $break-large) {
     right: calc((100vw - 85vw) / 2);
   }
 
-  @include screen-md-min {
+  @media screen and (min-width: 769px) {
     right: calc((100vw - 80vw) / 2);
   }
 
-  @include screen-lg-min {
+  @media screen and (min-width: 1281px) {
     right: calc((100vw - 65vw) / 2);
   }
 
@@ -36,7 +36,7 @@
     background: none;
     width: 100%;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       padding: 0 14px;
       height: 40px;
     }
@@ -197,7 +197,7 @@
     border: 0;
     width: 100%;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       padding: 12px 14px;
     }
 

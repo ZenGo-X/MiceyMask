@@ -32,7 +32,7 @@
     padding-left: 12px;
     padding-right: 12px;
 
-    @include screen-sm-min {
+    @media screen and (min-width: $break-large) {
       width: auto;
     }
   }

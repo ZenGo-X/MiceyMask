@@ -13,7 +13,7 @@
 }
 
 
-@include screen-lg-min {
+@media screen and (min-width: 1281px) {
   .first-view-main {
     width: 62vw;
   }
@@ -27,7 +27,7 @@
   max-width: initial;
 }
 
-@include screen-sm-max {
+@media only screen and (max-width: $break-small) {
   .import-account {
     margin: 24px;
     display: flex;

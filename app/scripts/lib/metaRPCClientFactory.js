@@ -18,6 +18,7 @@ class MetaRPCClient {
   }
 
   send(id, payload, cb) {
+    console.log('send', payload);
     this.requests.set(id, cb);
     this.connectionStream.write(payload);
     this.responseHandled[id] = false;

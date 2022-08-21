@@ -47,7 +47,7 @@ export default function RecoveryPhraseReminder({ onConfirm, hasBackedUp }) {
           <ul className="recovery-phrase-reminder__list">
             <li>
               <Typography
-                as="span"
+                tag="span"
                 color={COLORS.TEXT_DEFAULT}
                 fontWeight={FONT_WEIGHT.BOLD}
               >

@@ -276,7 +276,7 @@ describe('TokenDetailsPage', () => {
   it('should render token contract address title in token details page', () => {
     const store = configureMockStore()(state);
     const { getByText } = renderWithProvider(<TokenDetailsPage />, store);
-    expect(getByText('Token contract address')).toBeInTheDocument();
+    expect(getByText('Token Contract Address')).toBeInTheDocument();
   });
 
   it('should render token contract address in token details page', () => {
@@ -296,7 +296,7 @@ describe('TokenDetailsPage', () => {
   it('should render token decimal title in token details page', () => {
     const store = configureMockStore()(state);
     const { getByText } = renderWithProvider(<TokenDetailsPage />, store);
-    expect(getByText('Token decimal:')).toBeInTheDocument();
+    expect(getByText('Token Decimal:')).toBeInTheDocument();
   });
 
   it('should render number of token decimals in token details page', () => {
@@ -318,12 +318,15 @@ describe('TokenDetailsPage', () => {
   });
 
   it('should render token list title in token details page', () => {
+    process.env.TOKEN_DETECTION_V2 = true;
     const store = configureMockStore()(state);
     const { getByText } = renderWithProvider(<TokenDetailsPage />, store);
     expect(getByText('Token lists:')).toBeInTheDocument();
+    process.env.TOKEN_DETECTION_V2 = false;
   });
 
   it('should render token list for the token in token details page', () => {
+    process.env.TOKEN_DETECTION_V2 = true;
     const store = configureMockStore()(state);
     const { getByText } = renderWithProvider(<TokenDetailsPage />, store);
     expect(
@@ -331,6 +334,7 @@ describe('TokenDetailsPage', () => {
         'Aave, Bancor, CMC, Crypto.com, CoinGecko, 1inch, Paraswap, PMM, Synthetix, Zapper, Zerion, 0x.',
       ),
     ).toBeInTheDocument();
+    process.env.TOKEN_DETECTION_V2 = false;
   });
 
   it('should call hide token button when button is clicked in token details page', () => {

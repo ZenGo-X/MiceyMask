@@ -21,8 +21,12 @@ import NetworkStatistics from './network-statistics';
 const EditGasFeePopover = () => {
   const { balanceError, editGasMode } = useGasFeeContext();
   const t = useI18nContext();
-  const { closeAllModals, closeModal, currentModal, openModalCount } =
-    useTransactionModalContext();
+  const {
+    closeAllModals,
+    closeModal,
+    currentModal,
+    openModalCount,
+  } = useTransactionModalContext();
 
   if (currentModal !== 'editGasFee') {
     return null;

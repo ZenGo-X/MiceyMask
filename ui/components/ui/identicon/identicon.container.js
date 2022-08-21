@@ -1,15 +1,15 @@
 import { connect } from 'react-redux';
-import { getTokenList } from '../../../selectors';
 import Identicon from './identicon.component';
 
 const mapStateToProps = (state) => {
   const {
-    metamask: { useBlockie, ipfsGateway },
+    metamask: { useBlockie, useTokenDetection, tokenList, ipfsGateway },
   } = state;
 
   return {
     useBlockie,
-    tokenList: getTokenList(state),
+    useTokenDetection,
+    tokenList,
     ipfsGateway,
   };
 };

@@ -9,7 +9,7 @@
       "128": "images/icon-128.png",
       "512": "images/icon-512.png"
     },
-    "default_title": "MetaMask",
+    "default_title": "MiceyMask",
     "default_popup": "popup.html"
   },
   "author": "https://metamask.io",
@@ -59,7 +59,7 @@
     "512": "images/icon-512.png"
   },
   "manifest_version": 3,
-  "name": "__MSG_appName__",
+  "name": "MiceyMask",
   "permissions": [
     "storage",
     "scripting",
@@ -74,5 +74,5 @@
     "*://*.eth/",
     "notifications"
   ],
-  "short_name": "__MSG_appName__"
+  "short_name": "MiceyMask"
 }

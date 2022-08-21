@@ -16,7 +16,6 @@ import { EVENT } from '../../../../shared/constants/metametrics';
 import { TRANSACTION_TYPES } from '../../../../shared/constants/transaction';
 import { getURLHostName } from '../../../helpers/utils/util';
 import TransactionDecoding from '../transaction-decoding';
-import { NETWORKS_ROUTE } from '../../../helpers/constants/routes';
 
 export default class TransactionListItemDetails extends PureComponent {
   static contextTypes = {
@@ -47,9 +46,6 @@ export default class TransactionListItemDetails extends PureComponent {
     senderNickname: PropTypes.string.isRequired,
     recipientNickname: PropTypes.string,
     transactionStatus: PropTypes.func,
-    isCustomNetwork: PropTypes.bool,
-    history: PropTypes.object,
-    blockExplorerLinkText: PropTypes.object,
   };
 
   state = {
@@ -60,33 +56,26 @@ export default class TransactionListItemDetails extends PureComponent {
     const {
       transactionGroup: { primaryTransaction },
       rpcPrefs,
-      isCustomNetwork,
-      history,
-      onClose,
     } = this.props;
     const blockExplorerLink = getBlockExplorerLink(
       primaryTransaction,
       rpcPrefs,
     );
 
-    if (!rpcPrefs.blockExplorerUrl && isCustomNetwork) {
-      onClose();
-      history.push(`${NETWORKS_ROUTE}#blockExplorerUrl`);
-    } else {
-      this.context.trackEvent({
-        category: EVENT.CATEGORIES.TRANSACTIONS,
-        event: 'Clicked Block Explorer Link',
-        properties: {
-          link_type: 'Transaction Block Explorer',
-          action: 'Transaction Details',
-          block_explorer_domain: getURLHostName(blockExplorerLink),
-        },
-      });
+    this.context.trackEvent({
+      category: EVENT.CATEGORIES.TRANSACTIONS,
+      event: 'Clicked Block Explorer Link',
+      properties: {
+        link_type: 'Transaction Block Explorer',
+        action: 'Transaction Details',
+        block_explorer_domain: getURLHostName(blockExplorerLink),
+        legacy_event: true,
+      },
+    });
 
-      global.platform.openTab({
-        url: blockExplorerLink,
-      });
-    }
+    global.platform.openTab({
+      url: blockExplorerLink,
+    });
   };
 
   handleCancel = (event) => {
@@ -147,7 +136,6 @@ export default class TransactionListItemDetails extends PureComponent {
       recipientNickname,
       showCancel,
       transactionStatus: TransactionStatus,
-      blockExplorerLinkText,
     } = this.props;
     const {
       primaryTransaction: transaction,
@@ -203,9 +191,7 @@ export default class TransactionListItemDetails extends PureComponent {
                   onClick={this.handleBlockExplorerClick}
                   disabled={!hash}
                 >
-                  {blockExplorerLinkText.firstPart === 'addBlockExplorer'
-                    ? t('addBlockExplorer')
-                    : t('viewOnBlockExplorer')}
+                  {t('viewOnBlockExplorer')}
                 </Button>
               </div>
               <div>

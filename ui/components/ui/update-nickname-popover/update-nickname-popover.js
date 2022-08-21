@@ -9,7 +9,7 @@ import TextField from '../text-field';
 import { I18nContext } from '../../../contexts/i18n';
 
 import Identicon from '../identicon/identicon.component';
-import { getTokenList } from '../../../selectors';
+import { getUseTokenDetection, getTokenList } from '../../../selectors';
 
 export default function UpdateNicknamePopover({
   address,
@@ -46,6 +46,7 @@ export default function UpdateNicknamePopover({
     onClose();
   };
 
+  const useTokenDetection = useSelector(getUseTokenDetection);
   const tokenList = useSelector(getTokenList);
 
   return (
@@ -78,7 +79,8 @@ export default function UpdateNicknamePopover({
           className="update-nickname__content__indenticon"
           address={address}
           diameter={36}
-          image={tokenList[address.toLowerCase()]?.iconUrl}
+          useTokenDetection={useTokenDetection}
+          tokenList={tokenList}
         />
         <label className="update-nickname__content__label--capitalized">
           {t('address')}

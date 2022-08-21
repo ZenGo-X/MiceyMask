@@ -5,7 +5,7 @@ import Box from '../../../components/ui/box';
 import { I18nContext } from '../../../contexts/i18n';
 import { getURLHostName } from '../../../helpers/utils/util';
 import { MetaMetricsContext } from '../../../contexts/metametrics';
-import { EVENT, EVENT_NAMES } from '../../../../shared/constants/metametrics';
+import { EVENT } from '../../../../shared/constants/metametrics';
 
 export default function ViewOnBlockExplorer({
   blockExplorerUrl,
@@ -20,13 +20,13 @@ export default function ViewOnBlockExplorer({
       <button
         onClick={() => {
           trackEvent({
-            event: EVENT_NAMES.EXTERNAL_LINK_CLICKED,
+            event: 'Clicked Block Explorer Link',
             category: EVENT.CATEGORIES.SWAPS,
             sensitiveProperties: sensitiveTrackingProperties,
             properties: {
-              link_type: EVENT.EXTERNAL_LINK_TYPES.TRANSACTION_BLOCK_EXPLORER,
-              location: 'Swap Transaction',
-              url_domain: blockExplorerHostName,
+              link_type: 'Transaction Block Explorer',
+              action: 'Swap Transaction',
+              block_explorer_domain: blockExplorerHostName,
             },
           });
           global.platform.openTab({ url: blockExplorerUrl });

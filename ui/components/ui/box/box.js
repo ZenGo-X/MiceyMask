@@ -6,10 +6,7 @@ import {
   ALIGN_ITEMS,
   BLOCK_SIZES,
   BORDER_STYLE,
-  BACKGROUND_COLORS,
-  BORDER_COLORS,
-  TEXT_COLORS,
-  ICON_COLORS,
+  COLORS,
   DISPLAY,
   JUSTIFY_CONTENT,
   SIZES,
@@ -21,15 +18,64 @@ import {
 
 const BASE_CLASS_NAME = 'box';
 const Sizes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+export const BackgroundColors = [
+  COLORS.BACKGROUND_DEFAULT,
+  COLORS.BACKGROUND_ALTERNATIVE,
+  COLORS.OVERLAY_DEFAULT,
+  COLORS.PRIMARY_DEFAULT,
+  COLORS.PRIMARY_ALTERNATIVE,
+  COLORS.PRIMARY_MUTED,
+  COLORS.ERROR_DEFAULT,
+  COLORS.ERROR_ALTERNATIVE,
+  COLORS.ERROR_MUTED,
+  COLORS.WARNING_DEFAULT,
+  COLORS.WARNING_ALTERNATIVE,
+  COLORS.WARNING_MUTED,
+  COLORS.SUCCESS_DEFAULT,
+  COLORS.SUCCESS_ALTERNATIVE,
+  COLORS.SUCCESS_MUTED,
+  COLORS.INFO_DEFAULT,
+  COLORS.INFO_ALTERNATIVE,
+  COLORS.INFO_MUTED,
+  COLORS.MAINNET,
+  COLORS.ROPSTEN,
+  COLORS.KOVAN,
+  COLORS.RINKEBY,
+  COLORS.GOERLI,
+  COLORS.TRANSPARENT,
+  COLORS.LOCALHOST,
+];
+export const BorderColors = [
+  COLORS.BORDER_DEFAULT,
+  COLORS.BORDER_MUTED,
+  COLORS.PRIMARY_DEFAULT,
+  COLORS.PRIMARY_ALTERNATIVE,
+  COLORS.PRIMARY_MUTED,
+  COLORS.ERROR_DEFAULT,
+  COLORS.ERROR_ALTERNATIVE,
+  COLORS.ERROR_MUTED,
+  COLORS.WARNING_DEFAULT,
+  COLORS.WARNING_ALTERNATIVE,
+  COLORS.WARNING_MUTED,
+  COLORS.SUCCESS_DEFAULT,
+  COLORS.SUCCESS_ALTERNATIVE,
+  COLORS.SUCCESS_MUTED,
+  COLORS.INFO_DEFAULT,
+  COLORS.INFO_ALTERNATIVE,
+  COLORS.INFO_MUTED,
+  COLORS.MAINNET,
+  COLORS.ROPSTEN,
+  COLORS.KOVAN,
+  COLORS.RINKEBY,
+  COLORS.GOERLI,
+  COLORS.TRANSPARENT,
+  COLORS.LOCALHOST,
+];
 
 const ValidSize = PropTypes.oneOf(Sizes);
 const ValidSizeAndAuto = PropTypes.oneOf([...Sizes, 'auto']);
-export const ValidBackgroundColors = PropTypes.oneOf(
-  Object.values(BACKGROUND_COLORS),
-);
-export const ValidBorderColors = PropTypes.oneOf(Object.values(BORDER_COLORS));
-export const ValidTextColors = PropTypes.oneOf(Object.values(TEXT_COLORS));
-export const ValidIconColors = PropTypes.oneOf(Object.values(ICON_COLORS));
+const ValidBackgroundColors = PropTypes.oneOf(BackgroundColors);
+const ValidBorderColors = PropTypes.oneOf(BorderColors);
 
 const ArrayOfValidSizes = PropTypes.arrayOf(ValidSize);
 export const MultipleSizes = PropTypes.oneOfType([
@@ -53,15 +99,6 @@ const ArrayOfValidBackgroundColors = PropTypes.arrayOf(ValidBackgroundColors);
 export const MultipleBackgroundColors = PropTypes.oneOfType([
   ValidBackgroundColors,
   ArrayOfValidBackgroundColors,
-]);
-
-const ArrayOfValidTextColors = PropTypes.arrayOf(ValidTextColors);
-const ArrayOfValidIconColors = PropTypes.arrayOf(ValidIconColors);
-export const MultipleTextColors = PropTypes.oneOfType([
-  ValidTextColors,
-  ArrayOfValidTextColors,
-  ValidIconColors,
-  ArrayOfValidIconColors,
 ]);
 
 function isValidSize(type, value) {
@@ -190,8 +227,6 @@ export default function Box({
   children,
   className,
   backgroundColor,
-  color,
-  as = 'div',
   ...props
 }) {
   const boxClassName = classnames(
@@ -223,7 +258,6 @@ export default function Box({
     textAlign && generateClassNames('text-align', textAlign, isValidString),
     width && generateClassNames('width', width, isValidString),
     height && generateClassNames('height', height, isValidString),
-    color && generateClassNames('color', color, isValidString),
     backgroundColor &&
       generateClassNames('background-color', backgroundColor, isValidString),
     borderRadius && generateClassNames('rounded', borderRadius, isValidString),
@@ -250,11 +284,10 @@ export default function Box({
   if (typeof children === 'function') {
     return children(boxClassName);
   }
-  const Component = as;
   return (
-    <Component className={boxClassName} {...props}>
+    <div className={boxClassName} {...props}>
       {children}
-    </Component>
+    </div>
   );
 }
 
@@ -318,14 +351,4 @@ Box.propTypes = {
   ]),
   backgroundColor: MultipleBackgroundColors,
   className: PropTypes.string,
-  /**
-   * The polymorphic `as` prop allows you to change the root HTML element of the Box component
-   * Defaults to 'div'
-   */
-  as: PropTypes.string,
-  /**
-   * The color of the Typography component Should use the COLOR object from
-   * ./ui/helpers/constants/design-system.js
-   */
-  color: MultipleTextColors,
 };

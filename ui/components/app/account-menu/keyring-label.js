@@ -19,6 +19,9 @@ export default function KeyRingLabel({ keyring }) {
   const { type } = keyring;
 
   switch (type) {
+    case KEYRING_TYPES.MOUSE:
+      label = KEYRING_NAMES.MOUSE;
+      break;
     case KEYRING_TYPES.QR:
       label = KEYRING_NAMES.QR;
       break;

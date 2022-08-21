@@ -18,7 +18,6 @@ import {
   INVALID_RECIPIENT_ADDRESS_NOT_ETH_NETWORK_ERROR,
   KNOWN_RECIPIENT_ADDRESS_WARNING,
   NEGATIVE_ETH_ERROR,
-  RECIPIENT_TYPES,
 } from '../../pages/send/send.constants';
 
 import {
@@ -381,7 +380,6 @@ export const draftTransactionInitialState = {
     gasTotal: '0x0',
     maxFeePerGas: '0x0',
     maxPriorityFeePerGas: '0x0',
-    wasManuallyEdited: false,
   },
   history: [],
   id: null,
@@ -390,7 +388,6 @@ export const draftTransactionInitialState = {
     error: null,
     nickname: '',
     warning: null,
-    type: '',
     recipientWarningAcknowledged: false,
   },
   status: SEND_STATUSES.VALID,
@@ -521,7 +518,7 @@ export const computeEstimatedGasLimit = createAsyncThunk(
           value:
             send.amountMode === AMOUNT_MODES.MAX
               ? send.selectedAccount.balance
-              : draftTransaction.amount.value,
+              : send.amount.value,
           from: send.selectedAccount.address,
           data: draftTransaction.userInputHexData,
           type: '0x0',
@@ -606,7 +603,7 @@ export const initializeSendState = createAsyncThunk(
     // For instance, in the actions.js file we dispatch this action anytime the
     // chain changes.
     if (!draftTransaction) {
-      return thunkApi.rejectWithValue(
+      thunkApi.rejectWithValue(
         'draftTransaction not found, possibly not on send flow',
       );
     }
@@ -681,20 +678,6 @@ export const initializeSendState = createAsyncThunk(
     // We have to keep the gas slice in sync with the send slice state
     // so that it'll be initialized correctly if the gas modal is opened.
     await thunkApi.dispatch(setCustomGasLimit(gasLimit));
-
-    // There may be a case where the send has been canceled by the user while
-    // the gas estimate is being computed. So we check again to make sure that
-    // a currentTransactionUUID exists and matches the previous tx.
-    const newState = thunkApi.getState();
-    if (
-      newState.send.currentTransactionUUID !== sendState.currentTransactionUUID
-    ) {
-      return thunkApi.rejectWithValue(
-        `draftTransaction changed during initialization.
-        A new initializeSendState action must be dispatched.`,
-      );
-    }
-
     return {
       account,
       chainId: getCurrentChainId(state),
@@ -1058,15 +1041,19 @@ const slice = createSlice({
           draftTransaction.transactionType =
             TRANSACTION_ENVELOPE_TYPES.FEE_MARKET;
         } else {
-          if (action.payload.manuallyEdited) {
-            draftTransaction.gas.wasManuallyEdited = true;
-          }
-
-          // Update the gas price if it has not been manually edited,
-          // or if this current action is a manual edit.
+          // Until we remove the old UI we don't want to automatically update
+          // gasPrice if the user has already manually changed the field value.
+          // When receiving a new estimate the isAutomaticUpdate property will be
+          // on the payload (and set to true). If isAutomaticUpdate is true,
+          // then we check if the previous estimate was '0x0' or if the previous
+          // gasPrice equals the previous gasEstimate. if either of those cases
+          // are true then we update the gasPrice otherwise we skip it because
+          // it indicates the user has ejected from the estimates by modifying
+          // the field.
           if (
-            !draftTransaction.gas.wasManuallyEdited ||
-            action.payload.manuallyEdited
+            action.payload.isAutomaticUpdate !== true ||
+            state.gasPriceEstimate === '0x0' ||
+            draftTransaction.gas.gasPrice === state.gasPriceEstimate
           ) {
             draftTransaction.gas.gasPrice = addHexPrefix(
               action.payload.gasPrice,
@@ -1166,12 +1153,6 @@ const slice = createSlice({
       const draftTransaction =
         state.draftTransactions[state.currentTransactionUUID];
       draftTransaction.recipient.warning = action.payload;
-    },
-
-    updateRecipientType: (state, action) => {
-      const draftTransaction =
-        state.draftTransactions[state.currentTransactionUUID];
-      draftTransaction.recipient.type = action.payload;
     },
 
     updateDraftTransactionStatus: (state, action) => {
@@ -1384,8 +1365,7 @@ const slice = createSlice({
                 checkExistingAddresses(state.recipientInput, tokens))) ||
             isProbablyAnAssetContract
           ) {
-            draftTransaction.recipient.warning =
-              KNOWN_RECIPIENT_ADDRESS_WARNING;
+            draftTransaction.recipient.warning = KNOWN_RECIPIENT_ADDRESS_WARNING;
           } else {
             draftTransaction.recipient.warning = null;
           }
@@ -1415,60 +1395,56 @@ const slice = createSlice({
     validateSendState: (state) => {
       const draftTransaction =
         state.draftTransactions[state.currentTransactionUUID];
-      if (draftTransaction) {
-        switch (true) {
-          case Boolean(draftTransaction.amount.error):
-          case Boolean(draftTransaction.gas.error):
-          case Boolean(draftTransaction.asset.error):
-          case draftTransaction.asset.type === ASSET_TYPES.TOKEN &&
-            draftTransaction.asset.details === null:
-          case state.stage === SEND_STAGES.ADD_RECIPIENT:
-          case state.stage === SEND_STAGES.INACTIVE:
-          case state.gasEstimateIsLoading:
-          case new BigNumber(draftTransaction.gas.gasLimit, 16).lessThan(
-            new BigNumber(state.gasLimitMinimum),
-          ):
-            draftTransaction.status = SEND_STATUSES.INVALID;
-            break;
-          case draftTransaction.recipient.warning === 'loading':
-          case draftTransaction.recipient.warning ===
-            KNOWN_RECIPIENT_ADDRESS_WARNING &&
-            draftTransaction.recipient.recipientWarningAcknowledged === false:
-            draftTransaction.status = SEND_STATUSES.INVALID;
-            break;
-          default:
-            draftTransaction.status = SEND_STATUSES.VALID;
-        }
+      switch (true) {
+        case Boolean(draftTransaction.amount.error):
+        case Boolean(draftTransaction.gas.error):
+        case Boolean(draftTransaction.asset.error):
+        case draftTransaction.asset.type === ASSET_TYPES.TOKEN &&
+          draftTransaction.asset.details === null:
+        case state.stage === SEND_STAGES.ADD_RECIPIENT:
+        case state.stage === SEND_STAGES.INACTIVE:
+        case state.gasEstimateIsLoading:
+        case new BigNumber(draftTransaction.gas.gasLimit, 16).lessThan(
+          new BigNumber(state.gasLimitMinimum),
+        ):
+          draftTransaction.status = SEND_STATUSES.INVALID;
+          break;
+        case draftTransaction.recipient.warning === 'loading':
+        case draftTransaction.recipient.warning ===
+          KNOWN_RECIPIENT_ADDRESS_WARNING &&
+          draftTransaction.recipient.recipientWarningAcknowledged === false:
+          draftTransaction.status = SEND_STATUSES.INVALID;
+          break;
+        default:
+          draftTransaction.status = SEND_STATUSES.VALID;
       }
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(ACCOUNT_CHANGED, (state, action) => {
-        // This event occurs when the user's account details update due to
-        // background state changes. If the account that is being updated is
-        // the current from account on the edit flow we need to update
-        // the balance for the account and revalidate the send state.
-        if (state.stage === SEND_STAGES.EDIT && action.payload.account) {
+        // If we are on the edit flow then we need to watch for changes to the
+        // current account.address in state and keep balance updated
+        // appropriately
+        if (
+          state.stage === SEND_STAGES.EDIT &&
+          action.payload.account.address === state.selectedAccount.address
+        ) {
+          // This event occurs when the user's account details update due to
+          // background state changes. If the account that is being updated is
+          // the current from account on the edit flow we need to update
+          // the balance for the account and revalidate the send state.
+          state.selectedAccount.balance = action.payload.account.balance;
+          // We need to update the asset balance if the asset is the native
+          // network asset. Once we update the balance we recompute error state.
           const draftTransaction =
             state.draftTransactions[state.currentTransactionUUID];
-          if (
-            draftTransaction &&
-            draftTransaction.fromAccount &&
-            draftTransaction.fromAccount.address ===
-              action.payload.account.address
-          ) {
-            draftTransaction.fromAccount.balance =
-              action.payload.account.balance;
-            // We need to update the asset balance if the asset is the native
-            // network asset. Once we update the balance we recompute error state.
-            if (draftTransaction.asset.type === ASSET_TYPES.NATIVE) {
-              draftTransaction.asset.balance = action.payload.account.balance;
-            }
-            slice.caseReducers.validateAmountField(state);
-            slice.caseReducers.validateGasField(state);
-            slice.caseReducers.validateSendState(state);
+          if (draftTransaction?.asset.type === ASSET_TYPES.NATIVE) {
+            draftTransaction.asset.balance = action.payload.account.balance;
           }
+          slice.caseReducers.validateAmountField(state);
+          slice.caseReducers.validateGasField(state);
+          slice.caseReducers.validateSendState(state);
         }
       })
       .addCase(ADDRESS_BOOK_UPDATED, (state, action) => {
@@ -1535,28 +1511,26 @@ const slice = createSlice({
         state.selectedAccount.balance = action.payload.account.balance;
         const draftTransaction =
           state.draftTransactions[state.currentTransactionUUID];
-        if (draftTransaction) {
-          draftTransaction.gas.gasLimit = action.payload.gasLimit;
-          draftTransaction.gas.gasTotal = action.payload.gasTotal;
-          if (action.payload.chainHasChanged) {
-            // If the state was reinitialized as a result of the user changing
-            // the network from the network dropdown, then the selected asset is
-            // no longer valid and should be set to the native asset for the
-            // network.
-            draftTransaction.asset.type = ASSET_TYPES.NATIVE;
-            draftTransaction.asset.balance =
-              draftTransaction.fromAccount?.balance ??
-              state.selectedAccount.balance;
-            draftTransaction.asset.details = null;
-          }
-        }
+        draftTransaction.gas.gasLimit = action.payload.gasLimit;
         slice.caseReducers.updateGasFeeEstimates(state, {
           payload: {
             gasFeeEstimates: action.payload.gasFeeEstimates,
             gasEstimateType: action.payload.gasEstimateType,
           },
         });
+        draftTransaction.gas.gasTotal = action.payload.gasTotal;
         state.gasEstimatePollToken = action.payload.gasEstimatePollToken;
+        if (action.payload.chainHasChanged) {
+          // If the state was reinitialized as a result of the user changing
+          // the network from the network dropdown, then the selected asset is
+          // no longer valid and should be set to the native asset for the
+          // network.
+          draftTransaction.asset.type = ASSET_TYPES.NATIVE;
+          draftTransaction.asset.balance =
+            draftTransaction.fromAccount?.balance ??
+            state.selectedAccount.balance;
+          draftTransaction.asset.details = null;
+        }
         if (action.payload.gasEstimatePollToken) {
           state.gasEstimateIsLoading = false;
         }
@@ -1570,19 +1544,16 @@ const slice = createSlice({
             },
           });
         }
-        if (state.amountMode === AMOUNT_MODES.MAX) {
-          slice.caseReducers.updateAmountToMax(state);
-        }
         slice.caseReducers.validateAmountField(state);
         slice.caseReducers.validateGasField(state);
         slice.caseReducers.validateSendState(state);
       })
       .addCase(SELECTED_ACCOUNT_CHANGED, (state, action) => {
-        // This event occurs when the user selects a new account from the
-        // account menu, or the currently active account's balance updates.
-        // We only care about new transactions, not edits, here, because we use
-        // the fromAccount and ACCOUNT_CHANGED action for that.
-        if (state.stage !== SEND_STAGES.EDIT && action.payload.account) {
+        // If we are on the edit flow the account we are keyed into will be the
+        // original 'from' account, which may differ from the selected account
+        if (state.stage !== SEND_STAGES.EDIT) {
+          // This event occurs when the user selects a new account from the
+          // account menu, or the currently active account's balance updates.
           state.selectedAccount.balance = action.payload.account.balance;
           state.selectedAccount.address = action.payload.account.address;
           const draftTransaction =
@@ -1622,8 +1593,7 @@ const slice = createSlice({
                 });
               }
             } else {
-              draftTransaction.recipient.error =
-                INVALID_RECIPIENT_ADDRESS_ERROR;
+              draftTransaction.recipient.error = INVALID_RECIPIENT_ADDRESS_ERROR;
             }
           }
         }
@@ -1818,7 +1788,6 @@ export function updateGasPrice(gasPrice) {
       actions.updateGasFees({
         gasPrice,
         transactionType: TRANSACTION_ENVELOPE_TYPES.LEGACY,
-        manuallyEdited: true,
       }),
     );
   };
@@ -1889,7 +1858,6 @@ export function updateRecipientUserInput(userInput) {
     if (inputIsValidHexAddress) {
       const smartContractAddress = await isSmartContractAddress(userInput);
       if (smartContractAddress) {
-        dispatch(actions.updateRecipientType(RECIPIENT_TYPES.SMART_CONTRACT));
         const { symbol, decimals } =
           getTokenMetadata(userInput, tokenMap) || {};
 
@@ -2279,10 +2247,7 @@ export function signTransaction() {
         updateTransactionGasFees(draftTransaction.id, editingTx.txParams),
       );
     } else {
-      let transactionType =
-        draftTransaction.recipient.type === RECIPIENT_TYPES.SMART_CONTRACT
-          ? TRANSACTION_TYPES.CONTRACT_INTERACTION
-          : TRANSACTION_TYPES.SIMPLE_SEND;
+      let transactionType = TRANSACTION_TYPES.SIMPLE_SEND;
 
       if (draftTransaction.asset.type !== ASSET_TYPES.NATIVE) {
         transactionType =
@@ -2674,11 +2639,7 @@ export function isSendStateInitialized(state) {
  * @type {Selector<boolean>}
  */
 export function isSendFormInvalid(state) {
-  const draftTransaction = getCurrentDraftTransaction(state);
-  if (!draftTransaction) {
-    return true;
-  }
-  return draftTransaction.status === SEND_STATUSES.INVALID;
+  return getCurrentDraftTransaction(state).status === SEND_STATUSES.INVALID;
 }
 
 /**

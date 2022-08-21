@@ -23,7 +23,7 @@
   }
 
   &__form {
-    @include screen-sm-min {
+    @media screen and (min-width: $break-large) {
       max-width: 320px;
     }
 

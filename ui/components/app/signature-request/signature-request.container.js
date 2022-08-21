@@ -13,8 +13,10 @@ function mapStateToProps(state, ownProps) {
   const {
     msgParams: { from },
   } = txData;
-  const hardwareWalletRequiresConnection =
-    doesAddressRequireLedgerHidConnection(state, from);
+  const hardwareWalletRequiresConnection = doesAddressRequireLedgerHidConnection(
+    state,
+    from,
+  );
   const isLedgerWallet = isAddressLedger(state, from);
 
   return {
@@ -26,8 +28,11 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mergeProps(stateProps, dispatchProps, ownProps) {
-  const { allAccounts, isLedgerWallet, hardwareWalletRequiresConnection } =
-    stateProps;
+  const {
+    allAccounts,
+    isLedgerWallet,
+    hardwareWalletRequiresConnection,
+  } = stateProps;
   const {
     signPersonalMessage,
     signTypedMessage,

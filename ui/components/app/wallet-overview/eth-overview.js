@@ -31,7 +31,7 @@ import { setSwapsFromToken } from '../../../ducks/swaps/swaps';
 import IconButton from '../../ui/icon-button';
 import { isHardwareKeyring } from '../../../helpers/utils/hardware';
 import { MetaMetricsContext } from '../../../contexts/metametrics';
-import { EVENT, EVENT_NAMES } from '../../../../shared/constants/metametrics';
+import { EVENT } from '../../../../shared/constants/metametrics';
 import Spinner from '../../ui/spinner';
 import { startNewDraftTransaction } from '../../../ducks/send';
 import { ASSET_TYPES } from '../../../../shared/constants/transaction';
@@ -109,11 +109,11 @@ const EthOverview = ({ className }) => {
             label={t('buy')}
             onClick={() => {
               trackEvent({
-                event: EVENT_NAMES.NAV_BUY_BUTTON_CLICKED,
+                event: 'Clicked Deposit',
                 category: EVENT.CATEGORIES.NAVIGATION,
                 properties: {
-                  location: 'Home',
-                  text: 'Buy',
+                  action: 'Home',
+                  legacy_event: true,
                 },
               });
               dispatch(showModal({ name: 'DEPOSIT_ETHER' }));
@@ -126,12 +126,11 @@ const EthOverview = ({ className }) => {
             label={t('send')}
             onClick={() => {
               trackEvent({
-                event: EVENT_NAMES.NAV_SEND_BUTTON_CLICKED,
+                event: 'Clicked Send: Eth',
                 category: EVENT.CATEGORIES.NAVIGATION,
                 properties: {
-                  token_symbol: 'ETH',
-                  location: 'Home',
-                  text: 'Send',
+                  action: 'Home',
+                  legacy_event: true,
                 },
               });
               dispatch(
@@ -148,12 +147,11 @@ const EthOverview = ({ className }) => {
             onClick={() => {
               if (isSwapsChain) {
                 trackEvent({
-                  event: EVENT_NAMES.NAV_SWAP_BUTTON_CLICKED,
+                  event: 'Swaps Opened',
                   category: EVENT.CATEGORIES.SWAPS,
                   properties: {
-                    token_symbol: 'ETH',
-                    location: EVENT.SOURCE.SWAPS.MAIN_VIEW,
-                    text: 'Swap',
+                    source: EVENT.SOURCE.SWAPS.MAIN_VIEW,
+                    active_currency: 'ETH',
                   },
                 });
                 dispatch(setSwapsFromToken(defaultSwapsToken));

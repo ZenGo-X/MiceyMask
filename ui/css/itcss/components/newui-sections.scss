@@ -1,3 +1,6 @@
+$sub-mid-size-breakpoint: 667px;
+$sub-mid-size-breakpoint-range: "screen and (min-width: #{$break-large}) and (max-width: #{$sub-mid-size-breakpoint})";
+
 /*
   NewUI Container Elements
  */
@@ -47,7 +50,7 @@
 
 // main-container media queries
 
-@include screen-sm-min {
+@media screen and (min-width: $break-large) {
   .lap-visible {
     display: flex;
   }
@@ -64,7 +67,7 @@
   }
 }
 
-@include screen-md-min {
+@media screen and (min-width: 769px) {
   .main-container {
     width: 80vw;
     min-height: 82vh;
@@ -72,7 +75,7 @@
   }
 }
 
-@include screen-lg-min {
+@media screen and (min-width: 1281px) {
   .main-container {
     width: 62vw;
     min-height: 82vh;
@@ -80,7 +83,7 @@
   }
 }
 
-@include screen-sm-max {
+@media screen and (max-width: $break-small) {
   .lap-visible {
     display: none;
   }
@@ -114,19 +117,19 @@
   flex-direction: row-reverse;
   justify-content: space-between;
 
-  @include screen-sm-max {
+  @media screen and (max-width: $break-small) {
     height: 100%;
   }
 
-  @include screen-sm-min {
+  @media screen and (min-width: $break-large) {
     width: 85vw;
   }
 
-  @include screen-md-min {
+  @media screen and (min-width: 769px) {
     width: 80vw;
   }
 
-  @include screen-lg-min {
+  @media screen and (min-width: 1281px) {
     width: 62vw;
   }
 }

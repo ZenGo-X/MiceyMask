@@ -11,13 +11,13 @@
     position: relative;
     height: 100%;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       width: 100%;
       top: 0;
       box-shadow: none;
     }
 
-    @include screen-sm-min {
+    @media screen and (min-width: $break-large) {
       height: 620px;
     }
   }

@@ -10,7 +10,7 @@ import {
 } from '../../../selectors';
 import { formatBalance } from '../../../helpers/utils/util';
 import { getMostRecentOverviewPage } from '../../../ducks/history/history';
-import { EVENT, EVENT_NAMES } from '../../../../shared/constants/metametrics';
+import { EVENT } from '../../../../shared/constants/metametrics';
 import { SECOND } from '../../../../shared/constants/time';
 import {
   DEVICE_NAMES,
@@ -232,8 +232,11 @@ class ConnectHardwareForm extends Component {
   };
 
   onUnlockAccounts = (device, path) => {
-    const { history, mostRecentOverviewPage, unlockHardwareWalletAccounts } =
-      this.props;
+    const {
+      history,
+      mostRecentOverviewPage,
+      unlockHardwareWalletAccounts,
+    } = this.props;
     const { selectedAccounts } = this.state;
 
     if (selectedAccounts.length === 0) {
@@ -253,10 +256,10 @@ class ConnectHardwareForm extends Component {
       .then((_) => {
         this.context.trackEvent({
           category: EVENT.CATEGORIES.ACCOUNTS,
-          event: EVENT_NAMES.ACCOUNT_ADDED,
+          event: `Connected Account with: ${device}`,
           properties: {
-            account_type: EVENT.ACCOUNT_TYPES.HARDWARE,
-            account_hardware_type: device,
+            action: 'Connected Hardware Wallet',
+            legacy_event: true,
           },
         });
         history.push(mostRecentOverviewPage);
@@ -264,10 +267,10 @@ class ConnectHardwareForm extends Component {
       .catch((e) => {
         this.context.trackEvent({
           category: EVENT.CATEGORIES.ACCOUNTS,
-          event: EVENT_NAMES.ACCOUNT_ADD_FAILED,
+          event: 'Error connecting hardware wallet',
           properties: {
-            account_type: EVENT.ACCOUNT_TYPES.HARDWARE,
-            account_hardware_type: device,
+            action: 'Connected Hardware Wallet',
+            legacy_event: true,
             error: e.message,
           },
         });

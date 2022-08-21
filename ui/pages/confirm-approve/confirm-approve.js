@@ -155,8 +155,9 @@ export default function ConfirmApprove({
       })
     : null;
 
-  const parsedTransactionData =
-    parseStandardTokenTransactionData(transactionData);
+  const parsedTransactionData = parseStandardTokenTransactionData(
+    transactionData,
+  );
   const setApproveForAllArg = getTokenApprovedParam(parsedTransactionData);
 
   return tokenSymbol === undefined && assetName === undefined ? (
@@ -168,9 +169,6 @@ export default function ConfirmApprove({
         identiconAddress={toAddress}
         showAccountInHeader
         title={tokensText}
-        customTokenAmount={String(customPermissionAmount)}
-        dappProposedTokenAmount={tokenAmount}
-        currentTokenBalance={tokenBalance}
         contentComponent={
           <TransactionModalContextProvider>
             <ConfirmApproveContent

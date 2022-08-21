@@ -11,13 +11,13 @@
     position: relative;
     height: 100%;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       width: 100%;
       top: 0;
       box-shadow: none;
     }
 
-    @include screen-sm-min {
+    @media screen and (min-width: $break-large) {
       height: 620px;
     }
 
@@ -153,6 +153,7 @@
     display: flex;
     flex-flow: column;
     flex: 1 1 auto;
+    height: 0;
   }
 
   &__origin-row {
@@ -165,10 +166,6 @@
   &__origin-label {
     flex-grow: 1;
     margin-right: 5px;
-  }
-
-  &__origin-icon {
-    flex: 0 0 24px;
   }
 
   &__origin {
@@ -196,7 +193,7 @@
 
   &__rows {
     height: 100%;
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
     border-top: 1px solid var(--color-border-default);
     display: flex;

@@ -137,7 +137,7 @@ export default function Swap() {
   );
   const defaultSwapsToken = useSelector(getSwapsDefaultToken, isEqual);
   const tokenList = useSelector(getTokenList, isEqual);
-  const shuffledTokensList = shuffle(Object.values(tokenList));
+  const listTokenValues = shuffle(Object.values(tokenList));
   const reviewSwapClickedTimestamp = useSelector(getReviewSwapClickedTimestamp);
   const pendingSmartTransactions = useSelector(getPendingSmartTransactions);
   const reviewSwapClicked = Boolean(reviewSwapClickedTimestamp);
@@ -173,8 +173,10 @@ export default function Swap() {
   // This will pre-load gas fees before going to the View Quote page.
   useGasFeeEstimates();
 
-  const { balance: ethBalance, address: selectedAccountAddress } =
-    selectedAccount;
+  const {
+    balance: ethBalance,
+    address: selectedAccountAddress,
+  } = selectedAccount;
 
   const { destinationTokenAddedForSwap } = fetchParams || {};
 
@@ -474,7 +476,7 @@ export default function Swap() {
                   <BuildQuote
                     ethBalance={ethBalance}
                     selectedAccountAddress={selectedAccountAddress}
-                    shuffledTokensList={shuffledTokensList}
+                    shuffledTokensList={listTokenValues}
                   />
                 );
               }}

@@ -1,14 +1,11 @@
 import React from 'react';
 import sinon from 'sinon';
-import { fireEvent, screen } from '@testing-library/react';
-import { renderWithProvider } from '../../../../test/lib/render-helpers';
+import configureMockStore from 'redux-mock-store';
+import { mountWithRouter } from '../../../../test/lib/render-helpers';
 import MetaMetricsOptIn from './metametrics-opt-in.container';
 
 describe('MetaMetricsOptIn', () => {
   it('opt out of MetaMetrics', () => {
-    afterEach(() => {
-      sinon.resetHistory();
-    });
     const props = {
       history: {
         push: sinon.spy(),
@@ -16,12 +13,21 @@ describe('MetaMetricsOptIn', () => {
       setParticipateInMetaMetrics: sinon.stub().resolves(),
       participateInMetaMetrics: false,
     };
-    renderWithProvider(<MetaMetricsOptIn.WrappedComponent {...props} />);
+    const store = configureMockStore()({
+      metamask: {},
+    });
+    const wrapper = mountWithRouter(
+      <MetaMetricsOptIn.WrappedComponent {...props} />,
+      store,
+    );
+    const noThanksButton = wrapper.find(
+      '.btn-secondary.page-container__footer-button',
+    );
+    noThanksButton.simulate('click');
 
-    const noThanksButton = screen.getByTestId('page-container-footer-cancel');
-    fireEvent.click(noThanksButton);
     expect(
       props.setParticipateInMetaMetrics.calledOnceWithExactly(false),
     ).toStrictEqual(true);
+    props.setParticipateInMetaMetrics.resetHistory();
   });
 });

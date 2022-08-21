@@ -182,7 +182,7 @@
     margin-inline-start: 8px;
     padding: 8px;
 
-    @include screen-sm-min {
+    @media screen and (min-width: $break-large) {
       margin-bottom: 50px;
       margin-inline-end: 8px;
       left: 70%;

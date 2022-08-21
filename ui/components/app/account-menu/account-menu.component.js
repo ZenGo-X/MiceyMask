@@ -5,11 +5,7 @@ import Fuse from 'fuse.js';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import classnames from 'classnames';
 import { ENVIRONMENT_TYPE_POPUP } from '../../../../shared/constants/app';
-import {
-  EVENT,
-  EVENT_NAMES,
-  CONTEXT_PROPS,
-} from '../../../../shared/constants/metametrics';
+import { EVENT } from '../../../../shared/constants/metametrics';
 import { getEnvironmentType } from '../../../../app/scripts/lib/util';
 import Identicon from '../../ui/identicon';
 import SiteIcon from '../../ui/site-icon';
@@ -23,6 +19,7 @@ import {
 } from '../../../helpers/constants/common';
 import {
   SETTINGS_ROUTE,
+  NEW_IMPERSONATE_ACCOUNT_ROUTE,
   NEW_ACCOUNT_ROUTE,
   IMPORT_ACCOUNT_ROUTE,
   CONNECT_HARDWARE_ROUTE,
@@ -37,6 +34,7 @@ import IconSpeechBubbles from '../../ui/icon/icon-speech-bubbles';
 import IconConnect from '../../ui/icon/icon-connect';
 import IconCog from '../../ui/icon/icon-cog';
 import IconPlus from '../../ui/icon/icon-plus';
+import IconImpersonate from '../../ui/icon/icon-impersonate';
 import IconImport from '../../ui/icon/icon-import';
 
 import Button from '../../ui/button';
@@ -214,15 +212,15 @@ export default class AccountMenu extends Component {
           onClick={() => {
             this.context.trackEvent({
               category: EVENT.CATEGORIES.NAVIGATION,
-              event: EVENT_NAMES.NAV_ACCOUNT_SWITCHED,
+              event: 'Switched Account',
               properties: {
-                location: 'Main Menu',
+                action: 'Main Menu',
+                legacy_event: true,
               },
             });
             showAccountDetail(identity.address);
           }}
           key={identity.address}
-          data-testid="account-menu__account"
         >
           <div className="account-menu__check-mark">
             {isSelected ? (
@@ -234,7 +232,6 @@ export default class AccountMenu extends Component {
             <div className="account-menu__name">{identity.name || ''}</div>
             <UserPreferencedCurrencyDisplay
               className="account-menu__balance"
-              data-testid="account-menu__balance"
               value={identity.balance}
               type={PRIMARY}
             />
@@ -361,10 +358,26 @@ export default class AccountMenu extends Component {
             toggleAccountMenu();
             trackEvent({
               category: EVENT.CATEGORIES.NAVIGATION,
-              event: EVENT_NAMES.ACCOUNT_ADD_SELECTED,
+              event: 'Clicked Create Account',
               properties: {
-                account_type: EVENT.ACCOUNT_TYPES.DEFAULT,
-                location: 'Main Menu',
+                action: 'Main Menu',
+                legacy_event: true,
+              },
+            });
+            history.push(NEW_IMPERSONATE_ACCOUNT_ROUTE);
+          }}
+          icon={<IconImpersonate color="var(--color-icon-alternative)" />}
+          text={t('impersonateAccount')}
+        />
+        <AccountMenuItem
+          onClick={() => {
+            toggleAccountMenu();
+            trackEvent({
+              category: EVENT.CATEGORIES.NAVIGATION,
+              event: 'Clicked Create Account',
+              properties: {
+                action: 'Main Menu',
+                legacy_event: true,
               },
             });
             history.push(NEW_ACCOUNT_ROUTE);
@@ -377,10 +390,10 @@ export default class AccountMenu extends Component {
             toggleAccountMenu();
             trackEvent({
               category: EVENT.CATEGORIES.NAVIGATION,
-              event: EVENT_NAMES.ACCOUNT_ADD_SELECTED,
+              event: 'Clicked Import Account',
               properties: {
-                account_type: EVENT.ACCOUNT_TYPES.IMPORTED,
-                location: 'Main Menu',
+                action: 'Main Menu',
+                legacy_event: true,
               },
             });
             history.push(IMPORT_ACCOUNT_ROUTE);
@@ -398,10 +411,10 @@ export default class AccountMenu extends Component {
             toggleAccountMenu();
             trackEvent({
               category: EVENT.CATEGORIES.NAVIGATION,
-              event: EVENT_NAMES.ACCOUNT_ADD_SELECTED,
+              event: 'Clicked Connect Hardware',
               properties: {
-                account_type: EVENT.ACCOUNT_TYPES.HARDWARE,
-                location: 'Main Menu',
+                action: 'Main Menu',
+                legacy_event: true,
               },
             });
             if (getEnvironmentType() === ENVIRONMENT_TYPE_POPUP) {
@@ -445,18 +458,6 @@ export default class AccountMenu extends Component {
         }
         <AccountMenuItem
           onClick={() => {
-            trackEvent(
-              {
-                category: EVENT.CATEGORIES.NAVIGATION,
-                event: EVENT_NAMES.SUPPORT_LINK_CLICKED,
-                properties: {
-                  url: supportLink,
-                },
-              },
-              {
-                contextPropsIntoEventProperties: [CONTEXT_PROPS.PAGE_TITLE],
-              },
-            );
             global.platform.openTab({ url: supportLink });
           }}
           icon={
@@ -474,9 +475,10 @@ export default class AccountMenu extends Component {
             history.push(SETTINGS_ROUTE);
             this.context.trackEvent({
               category: EVENT.CATEGORIES.NAVIGATION,
-              event: EVENT_NAMES.NAV_SETTINGS_OPENED,
+              event: 'Opened Settings',
               properties: {
-                location: 'Main Menu',
+                action: 'Main Menu',
+                legacy_event: true,
               },
             });
           }}

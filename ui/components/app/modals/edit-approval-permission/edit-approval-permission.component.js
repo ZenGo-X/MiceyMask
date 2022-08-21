@@ -87,10 +87,8 @@ export default class EditApprovalPermission extends PureComponent {
             >
               <div
                 className={classnames({
-                  'edit-approval-permission__edit-section__radio-button-outline':
-                    !selectedOptionIsUnlimited,
-                  'edit-approval-permission__edit-section__radio-button-outline--selected':
-                    selectedOptionIsUnlimited,
+                  'edit-approval-permission__edit-section__radio-button-outline': !selectedOptionIsUnlimited,
+                  'edit-approval-permission__edit-section__radio-button-outline--selected': selectedOptionIsUnlimited,
                 })}
               />
               <div className="edit-approval-permission__edit-section__radio-button-fill" />
@@ -101,10 +99,8 @@ export default class EditApprovalPermission extends PureComponent {
             <div className="edit-approval-permission__edit-section__option-text">
               <div
                 className={classnames({
-                  'edit-approval-permission__edit-section__option-label':
-                    !selectedOptionIsUnlimited,
-                  'edit-approval-permission__edit-section__option-label--selected':
-                    selectedOptionIsUnlimited,
+                  'edit-approval-permission__edit-section__option-label': !selectedOptionIsUnlimited,
+                  'edit-approval-permission__edit-section__option-label--selected': selectedOptionIsUnlimited,
                 })}
               >
                 {new BigNumber(tokenAmount).equals(
@@ -130,10 +126,8 @@ export default class EditApprovalPermission extends PureComponent {
             >
               <div
                 className={classnames({
-                  'edit-approval-permission__edit-section__radio-button-outline':
-                    selectedOptionIsUnlimited,
-                  'edit-approval-permission__edit-section__radio-button-outline--selected':
-                    !selectedOptionIsUnlimited,
+                  'edit-approval-permission__edit-section__radio-button-outline': selectedOptionIsUnlimited,
+                  'edit-approval-permission__edit-section__radio-button-outline--selected': !selectedOptionIsUnlimited,
                 })}
               />
               <div className="edit-approval-permission__edit-section__radio-button-fill" />
@@ -144,10 +138,8 @@ export default class EditApprovalPermission extends PureComponent {
             <div className="edit-approval-permission__edit-section__option-text">
               <div
                 className={classnames({
-                  'edit-approval-permission__edit-section__option-label':
-                    selectedOptionIsUnlimited,
-                  'edit-approval-permission__edit-section__option-label--selected':
-                    !selectedOptionIsUnlimited,
+                  'edit-approval-permission__edit-section__option-label': selectedOptionIsUnlimited,
+                  'edit-approval-permission__edit-section__option-label--selected': !selectedOptionIsUnlimited,
                 })}
               >
                 {t('customSpendLimit')}

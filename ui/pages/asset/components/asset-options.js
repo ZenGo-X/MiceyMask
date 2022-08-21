@@ -1,12 +1,8 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { I18nContext } from '../../../contexts/i18n';
 import { Menu, MenuItem } from '../../../components/ui/menu';
-import { getBlockExplorerLinkText } from '../../../selectors';
-import { NETWORKS_ROUTE } from '../../../helpers/constants/routes';
 
 const AssetOptions = ({
   onRemove,
@@ -15,22 +11,13 @@ const AssetOptions = ({
   onViewTokenDetails,
   tokenSymbol,
   isNativeAsset,
+  isEthNetwork,
 }) => {
   const t = useContext(I18nContext);
-  const [assetOptionsButtonElement, setAssetOptionsButtonElement] =
-    useState(null);
+  const [assetOptionsButtonElement, setAssetOptionsButtonElement] = useState(
+    null,
+  );
   const [assetOptionsOpen, setAssetOptionsOpen] = useState(false);
-  const history = useHistory();
-  const blockExplorerLinkText = useSelector(getBlockExplorerLinkText);
-
-  const routeToAddBlockExplorerUrl = () => {
-    history.push(`${NETWORKS_ROUTE}#blockExplorerUrl`);
-  };
-
-  const openBlockExplorer = () => {
-    setAssetOptionsOpen(false);
-    onClickBlockExplorer();
-  };
 
   return (
     <>
@@ -59,18 +46,14 @@ const AssetOptions = ({
           <MenuItem
             iconClassName="fas fa-external-link-alt asset-options__icon"
             data-testid="asset-options__etherscan"
-            onClick={
-              blockExplorerLinkText.firstPart === 'addBlockExplorer'
-                ? routeToAddBlockExplorerUrl
-                : openBlockExplorer
-            }
+            onClick={() => {
+              setAssetOptionsOpen(false);
+              onClickBlockExplorer();
+            }}
           >
-            {t(
-              blockExplorerLinkText.firstPart,
-              blockExplorerLinkText.secondPart === ''
-                ? null
-                : [t('blockExplorerAssetAction')],
-            )}
+            {isEthNetwork
+              ? t('viewOnEtherscan', [t('blockExplorerAssetAction')])
+              : t('viewinExplorer', [t('blockExplorerAssetAction')])}
           </MenuItem>
           {isNativeAsset ? null : (
             <MenuItem
@@ -107,6 +90,7 @@ const isNotFunc = (p) => {
 };
 
 AssetOptions.propTypes = {
+  isEthNetwork: PropTypes.bool,
   isNativeAsset: PropTypes.bool,
   onClickBlockExplorer: PropTypes.func.isRequired,
   onViewAccountDetails: PropTypes.func.isRequired,

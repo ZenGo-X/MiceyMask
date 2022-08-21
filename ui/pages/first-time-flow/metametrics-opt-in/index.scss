@@ -13,7 +13,7 @@
     margin-right: 28%;
     color: var(--color-text-default);
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       justify-content: center;
       margin-left: 2%;
       margin-right: 0%;
@@ -99,7 +99,7 @@
   &__footer {
     margin-top: 26px;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       margin-top: 10px;
       justify-content: center;
       margin-left: 2%;

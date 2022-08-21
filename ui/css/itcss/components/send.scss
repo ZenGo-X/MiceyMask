@@ -3,7 +3,7 @@
   flex-flow: column nowrap;
   z-index: 25;
 
-  @include screen-sm-max {
+  @media screen and (max-width: $break-small) {
     width: 100%;
     overflow-y: auto;
   }
@@ -24,7 +24,7 @@
   width: 498px;
   flex: 1 0 auto;
 
-  @include screen-sm-max {
+  @media screen and (max-width: $break-small) {
     top: 0;
     width: 100%;
     box-shadow: none;
@@ -56,7 +56,7 @@
   padding: 4px;
   background-color: var(--color-background-default);
 
-  @include screen-sm-max {
+  @media screen and (max-width: $break-small) {
     position: relative;
     top: 0;
   }
@@ -334,7 +334,7 @@
     flex-flow: column nowrap;
     flex: 1 0 auto;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       top: 0;
       width: 100%;
       box-shadow: none;
@@ -347,7 +347,7 @@
     top: -35px;
     z-index: 25;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       position: relative;
       top: 0;
       flex: 0 0 auto;
@@ -385,7 +385,7 @@
     align-items: center;
     flex: 0 0 auto;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       margin-top: 24px;
     }
 
@@ -413,7 +413,7 @@
     align-items: center;
     position: relative;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       width: 100%;
       top: 0;
       box-shadow: none;
@@ -424,7 +424,7 @@
   &__send-header-icon-container {
     z-index: 25;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       position: relative;
       top: 0;
     }
@@ -450,7 +450,7 @@
     border-radius: 50%;
     z-index: 100;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       top: 36px;
     }
   }
@@ -464,7 +464,7 @@
     justify-content: center;
     align-items: center;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       height: 59px;
       width: 100vw;
     }
@@ -479,7 +479,7 @@
     left: 178px;
     top: 75px;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       top: 46px;
       left: 0;
       right: 0;
@@ -527,7 +527,7 @@
   }
 
   &__form {
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       margin: 0;
       flex: 1 1 auto;
     }
@@ -666,7 +666,7 @@
       flex-grow: 1;
     }
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       &__asset-data {
         width: 60%;
       }
@@ -868,7 +868,7 @@
     display: flex;
     flex-flow: column;
 
-    @include screen-sm-max {
+    @media screen and (max-width: $break-small) {
       width: 100vw;
       height: 100vh;
     }
@@ -882,7 +882,7 @@
       align-items: center;
       justify-content: space-between;
 
-      @include screen-sm-max {
+      @media screen and (max-width: $break-small) {
         flex: 0 0 auto;
       }
     }
@@ -909,7 +909,7 @@
       display: flex;
       margin-bottom: 24px;
 
-      @include screen-sm-max {
+      @media screen and (max-width: $break-small) {
         flex-flow: column;
         flex: 1 1 auto;
       }
@@ -925,7 +925,7 @@
       justify-content: space-between;
       position: relative;
 
-      @include screen-sm-max {
+      @media screen and (max-width: $break-small) {
         flex: 0 0 auto;
       }
     }

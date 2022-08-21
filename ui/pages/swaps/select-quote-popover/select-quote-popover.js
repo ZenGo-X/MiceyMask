@@ -35,10 +35,9 @@ const SelectQuotePopover = ({
     setContentView('sortList');
   }, []);
 
-  const onRowClick = useCallback(
-    (aggId) => setSelectedAggId(aggId),
-    [setSelectedAggId],
-  );
+  const onRowClick = useCallback((aggId) => setSelectedAggId(aggId), [
+    setSelectedAggId,
+  ]);
 
   const onCaretClick = useCallback(
     (aggId) => {
@@ -125,6 +124,7 @@ SelectQuotePopover.propTypes = {
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,
   swapToSymbol: PropTypes.string,
+  renderableData: PropTypes.array,
   quoteDataRows: PropTypes.arrayOf(QUOTE_DATA_ROWS_PROPTYPES_SHAPE),
   initialAggId: PropTypes.string,
   onQuoteDetailsIsOpened: PropTypes.func,

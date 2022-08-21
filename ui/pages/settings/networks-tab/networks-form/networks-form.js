@@ -12,7 +12,6 @@ import validUrl from 'valid-url';
 import log from 'loglevel';
 import classnames from 'classnames';
 import { addHexPrefix } from 'ethereumjs-util';
-import { isEqual } from 'lodash';
 import { useI18nContext } from '../../../../hooks/useI18nContext';
 import {
   isPrefixedFormattedHexString,
@@ -105,8 +104,6 @@ const NetworksForm = ({
   const chainIdMatchesFeaturedRPC = FEATURED_RPCS.some(
     (featuredRpc) => Number(featuredRpc.chainId) === Number(chainId),
   );
-  const [isEditing, setIsEditing] = useState(Boolean(addNewNetwork));
-  const [previousNetwork, setPreviousNetwork] = useState(selectedNetwork);
 
   const resetForm = useCallback(() => {
     setNetworkName(selectedNetworkName || '');
@@ -117,8 +114,6 @@ const NetworksForm = ({
     setErrors({});
     setWarnings({});
     setIsSubmitting(false);
-    setIsEditing(false);
-    setPreviousNetwork(selectedNetwork);
   }, [selectedNetwork, selectedNetworkName]);
 
   const stateIsUnchanged = () => {
@@ -154,12 +149,11 @@ const NetworksForm = ({
       setErrors({});
       setIsSubmitting(false);
     } else if (
-      (prevNetworkName.current !== selectedNetworkName ||
-        prevRpcUrl.current !== selectedNetwork.rpcUrl ||
-        prevChainId.current !== selectedNetwork.chainId ||
-        prevTicker.current !== selectedNetwork.ticker ||
-        prevBlockExplorerUrl.current !== selectedNetwork.blockExplorerUrl) &&
-      (!isEditing || !isEqual(selectedNetwork, previousNetwork))
+      prevNetworkName.current !== selectedNetworkName ||
+      prevRpcUrl.current !== selectedNetwork.rpcUrl ||
+      prevChainId.current !== selectedNetwork.chainId ||
+      prevTicker.current !== selectedNetwork.ticker ||
+      prevBlockExplorerUrl.current !== selectedNetwork.blockExplorerUrl
     ) {
       resetForm(selectedNetwork);
     }
@@ -167,9 +161,14 @@ const NetworksForm = ({
     selectedNetwork,
     selectedNetworkName,
     addNewNetwork,
-    previousNetwork,
+    setNetworkName,
+    setRpcUrl,
+    setChainId,
+    setTicker,
+    setBlockExplorerUrl,
+    setErrors,
+    setIsSubmitting,
     resetForm,
-    isEditing,
   ]);
 
   useEffect(() => {
@@ -608,20 +607,14 @@ const NetworksForm = ({
         <FormField
           autoFocus
           error={errors.networkName?.msg || ''}
-          onChange={(value) => {
-            setIsEditing(true);
-            setNetworkName(value);
-          }}
+          onChange={setNetworkName}
           titleText={t('networkName')}
           value={networkName}
           disabled={viewOnly}
         />
         <FormField
           error={errors.rpcUrl?.msg || ''}
-          onChange={(value) => {
-            setIsEditing(true);
-            setRpcUrl(value);
-          }}
+          onChange={setRpcUrl}
           titleText={t('rpcUrl')}
           value={
             rpcUrl?.includes(`/v3/${infuraProjectId}`)
@@ -632,10 +625,7 @@ const NetworksForm = ({
         />
         <FormField
           warning={warnings.chainId?.msg || ''}
-          onChange={(value) => {
-            setIsEditing(true);
-            setChainId(value);
-          }}
+          onChange={setChainId}
           titleText={t('chainId')}
           value={chainId}
           disabled={viewOnly}
@@ -643,25 +633,18 @@ const NetworksForm = ({
         />
         <FormField
           warning={warnings.ticker?.msg || ''}
-          onChange={(value) => {
-            setIsEditing(true);
-            setTicker(value);
-          }}
+          onChange={setTicker}
           titleText={t('currencySymbol')}
           value={ticker}
           disabled={viewOnly}
         />
         <FormField
           error={errors.blockExplorerUrl?.msg || ''}
-          onChange={(value) => {
-            setIsEditing(true);
-            setBlockExplorerUrl(value);
-          }}
+          onChange={setBlockExplorerUrl}
           titleText={t('blockExplorerUrl')}
           titleUnit={t('optionalWithParanthesis')}
           value={blockExplorerUrl}
           disabled={viewOnly}
-          autoFocus={window.location.hash.split('#')[2] === 'blockExplorerUrl'}
         />
       </div>
       <div

@@ -99,8 +99,9 @@ export default function EditGasDisplay({
     }
   }, [showAdvancedForm]);
 
-  const dappSuggestedAndTxParamGasFeesAreTheSame =
-    areDappSuggestedAndTxParamGasFeesTheSame(transaction);
+  const dappSuggestedAndTxParamGasFeesAreTheSame = areDappSuggestedAndTxParamGasFeesTheSame(
+    transaction,
+  );
 
   const requireDappAcknowledgement = Boolean(
     transaction?.dappSuggestedGasFees &&
@@ -196,13 +197,17 @@ export default function EditGasDisplay({
             supportsEIP1559 &&
             estimatedMaximumFiat !== undefined && (
               <>
-                <Typography as="span" key="label" fontWeight={FONT_WEIGHT.BOLD}>
+                <Typography
+                  tag="span"
+                  key="label"
+                  fontWeight={FONT_WEIGHT.BOLD}
+                >
                   {t('editGasSubTextFeeLabel')}
                 </Typography>
-                <Typography as="span" key="secondary">
+                <Typography tag="span" key="secondary">
                   {estimatedMaximumFiat}
                 </Typography>
-                <Typography as="span" key="primary">
+                <Typography tag="span" key="primary">
                   {`(${estimatedMaximumNative})`}
                 </Typography>
               </>
@@ -275,7 +280,7 @@ export default function EditGasDisplay({
               onClick={() => {
                 setShowAdvancedForm(!showAdvancedForm);
                 trackEvent({
-                  event: 'Clicked "Advanced options"',
+                  event: 'Clicked "Advanced Options"',
                   category: EVENT.CATEGORIES.TRANSACTIONS,
                   properties: {
                     action: 'Edit Screen',

@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import MetaFoxLogo from '../../../ui/metafox-logo';
 import PageContainerFooter from '../../../ui/page-container/page-container-footer';
-import {
-  EVENT,
-  EVENT_NAMES,
-} from '../../../../../shared/constants/metametrics';
+import { EVENT } from '../../../../../shared/constants/metametrics';
 
 export default class MetaMetricsOptInModal extends Component {
   static propTypes = {
@@ -116,7 +112,7 @@ export default class MetaMetricsOptInModal extends Component {
                   trackEvent(
                     {
                       category: EVENT.CATEGORIES.ONBOARDING,
-                      event: EVENT_NAMES.METRICS_OPT_OUT,
+                      event: 'Metrics Opt Out',
                       properties: {
                         action: 'Metrics Option',
                         legacy_event: true,
@@ -137,7 +133,7 @@ export default class MetaMetricsOptInModal extends Component {
                   trackEvent(
                     {
                       category: EVENT.CATEGORIES.ONBOARDING,
-                      event: EVENT_NAMES.METRICS_OPT_IN,
+                      event: 'Metrics Opt In',
                       properties: {
                         action: 'Metrics Option',
                         legacy_event: true,

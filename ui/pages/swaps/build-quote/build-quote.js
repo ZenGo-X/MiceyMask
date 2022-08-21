@@ -58,7 +58,6 @@ import {
   getMaxSlippage,
   getIsFeatureFlagLoaded,
   getCurrentSmartTransactionsError,
-  getSmartTransactionFees,
 } from '../../../ducks/swaps/swaps';
 import {
   getSwapsDefaultToken,
@@ -66,6 +65,7 @@ import {
   getCurrentCurrency,
   getCurrentChainId,
   getRpcPrefsForCurrentProvider,
+  getUseTokenDetection,
   getTokenList,
   isHardwareWallet,
   getHardwareWalletType,
@@ -86,7 +86,7 @@ import {
   isSwapsDefaultTokenAddress,
   isSwapsDefaultTokenSymbol,
 } from '../../../../shared/modules/swaps.utils';
-import { EVENT, EVENT_NAMES } from '../../../../shared/constants/metametrics';
+import { EVENT } from '../../../../shared/constants/metametrics';
 import {
   SWAPS_CHAINID_DEFAULT_BLOCK_EXPLORER_URL_MAP,
   SWAPS_CHAINID_DEFAULT_TOKEN_MAP,
@@ -100,7 +100,6 @@ import {
   clearSwapsQuotes,
   stopPollingForQuotes,
   setSmartTransactionsOptInStatus,
-  clearSmartTransactionFees,
 } from '../../../store/actions';
 import {
   countDecimals,
@@ -131,8 +130,9 @@ export default function BuildQuote({
   const history = useHistory();
   const trackEvent = useContext(MetaMetricsContext);
 
-  const [fetchedTokenExchangeRate, setFetchedTokenExchangeRate] =
-    useState(undefined);
+  const [fetchedTokenExchangeRate, setFetchedTokenExchangeRate] = useState(
+    undefined,
+  );
   const [verificationClicked, setVerificationClicked] = useState(false);
 
   const isFeatureFlagLoaded = useSelector(getIsFeatureFlagLoaded);
@@ -151,6 +151,7 @@ export default function BuildQuote({
   const chainId = useSelector(getCurrentChainId);
   const rpcPrefs = useSelector(getRpcPrefsForCurrentProvider, shallowEqual);
   const tokenList = useSelector(getTokenList, isEqual);
+  const useTokenDetection = useSelector(getUseTokenDetection);
   const quotes = useSelector(getQuotes, isEqual);
   const areQuotesPresent = Object.keys(quotes).length > 0;
 
@@ -165,7 +166,6 @@ export default function BuildQuote({
   const currentSmartTransactionsEnabled = useSelector(
     getCurrentSmartTransactionsEnabled,
   );
-  const smartTransactionFees = useSelector(getSmartTransactionFees);
   const smartTransactionsOptInPopoverDisplayed =
     smartTransactionsOptInStatus !== undefined;
   const currentSmartTransactionsError = useSelector(
@@ -213,6 +213,7 @@ export default function BuildQuote({
     currentCurrency,
     chainId,
     tokenList,
+    useTokenDetection,
   );
 
   const tokensToSearchSwapFrom = useTokensToSearch({
@@ -276,7 +277,7 @@ export default function BuildQuote({
       const newBalanceError = new BigNumber(newInputValue || 0).gt(
         balance || 0,
       );
-      // "setBalanceError" is just a warning, a user can still click on the "Review swap" button.
+      // "setBalanceError" is just a warning, a user can still click on the "Review Swap" button.
       if (balanceError !== newBalanceError) {
         dispatch(setBalanceError(newBalanceError));
       }
@@ -470,13 +471,6 @@ export default function BuildQuote({
     trackBuildQuotePageLoadedEvent();
   }, [dispatch, trackBuildQuotePageLoadedEvent]);
 
-  useEffect(() => {
-    if (smartTransactionsEnabled && smartTransactionFees?.tradeTxFees) {
-      // We want to clear STX fees, because we only want to use fresh ones on the View Quote page.
-      clearSmartTransactionFees();
-    }
-  }, [smartTransactionsEnabled, smartTransactionFees]);
-
   const BlockExplorerLink = () => {
     return (
       <a
@@ -484,12 +478,12 @@ export default function BuildQuote({
         key="build-quote-etherscan-link"
         onClick={() => {
           trackEvent({
-            event: EVENT_NAMES.EXTERNAL_LINK_CLICKED,
+            event: 'Clicked Block Explorer Link',
             category: EVENT.CATEGORIES.SWAPS,
             properties: {
-              link_type: EVENT.EXTERNAL_LINK_TYPES.TOKEN_TRACKER,
-              location: 'Swaps Confirmation',
-              url_domain: getURLHostName(blockExplorerTokenLink),
+              link_type: 'Token Tracker',
+              action: 'Swaps Confirmation',
+              block_explorer_domain: getURLHostName(blockExplorerTokenLink),
             },
           });
           global.platform.openTab({
@@ -558,7 +552,7 @@ export default function BuildQuote({
     timeoutIdForQuotesPrefetching = setTimeout(() => {
       timeoutIdForQuotesPrefetching = null;
       if (!isReviewSwapButtonDisabled) {
-        // Only do quotes prefetching if the Review swap button is enabled.
+        // Only do quotes prefetching if the Review Swap button is enabled.
         prefetchQuotesWithoutRedirecting();
       }
     }, 1000);
@@ -625,7 +619,7 @@ export default function BuildQuote({
                 {t('stxDescription')}
               </Typography>
               <Typography
-                as="ul"
+                tag="ul"
                 variant={TYPOGRAPHY.H7}
                 fontWeight={FONT_WEIGHT.BOLD}
                 marginTop={3}
@@ -636,7 +630,7 @@ export default function BuildQuote({
                 <li>
                   {t('stxBenefit4')}
                   <Typography
-                    as="span"
+                    tag="span"
                     fontWeight={FONT_WEIGHT.NORMAL}
                     variant={TYPOGRAPHY.H7}
                   >
@@ -651,7 +645,7 @@ export default function BuildQuote({
               >
                 {t('stxSubDescription')}&nbsp;
                 <Typography
-                  as="span"
+                  tag="span"
                   fontWeight={FONT_WEIGHT.BOLD}
                   variant={TYPOGRAPHY.H8}
                   color={COLORS.TEXT_ALTERNATIVE}
@@ -865,7 +859,7 @@ export default function BuildQuote({
       </div>
       <SwapsFooter
         onSubmit={async () => {
-          // We need this to know how long it took to go from clicking on the Review swap button to rendered View Quote page.
+          // We need this to know how long it took to go from clicking on the Review Swap button to rendered View Quote page.
           dispatch(setReviewSwapClickedTimestamp(Date.now()));
           // In case that quotes prefetching is waiting to be executed, but hasn't started yet,
           // we want to cancel it and fetch quotes from here.
@@ -883,7 +877,7 @@ export default function BuildQuote({
             // If there are prefetched quotes already, go directly to the View Quote page.
             history.push(VIEW_QUOTE_ROUTE);
           } else {
-            // If the "Review swap" button was clicked while quotes are being fetched, go to the Loading Quotes page.
+            // If the "Review Swap" button was clicked while quotes are being fetched, go to the Loading Quotes page.
             await dispatch(setBackgroundSwapRouteState('loading'));
             history.push(LOADING_QUOTES_ROUTE);
           }

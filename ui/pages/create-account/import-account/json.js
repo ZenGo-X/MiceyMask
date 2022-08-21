@@ -7,7 +7,7 @@ import FileInput from 'react-simple-file-input';
 import * as actions from '../../../store/actions';
 import { getMetaMaskAccounts } from '../../../selectors';
 import Button from '../../../components/ui/button';
-import { EVENT, EVENT_NAMES } from '../../../../shared/constants/metametrics';
+import { EVENT } from '../../../../shared/constants/metametrics';
 import { getMostRecentOverviewPage } from '../../../ducks/history/history';
 
 const HELP_LINK =
@@ -119,10 +119,10 @@ class JsonImportSubview extends Component {
           history.push(mostRecentOverviewPage);
           this.context.trackEvent({
             category: EVENT.CATEGORIES.ACCOUNTS,
-            event: EVENT_NAMES.ACCOUNT_ADDED,
+            event: 'Imported Account with JSON',
             properties: {
-              account_type: EVENT.ACCOUNT_TYPES.IMPORTED,
-              account_import_type: EVENT.ACCOUNT_IMPORT_TYPES.JSON,
+              action: 'Import Account',
+              legacy_event: true,
             },
           });
           displayWarning(null);
@@ -130,10 +130,10 @@ class JsonImportSubview extends Component {
           displayWarning(t('importAccountError'));
           this.context.trackEvent({
             category: EVENT.CATEGORIES.ACCOUNTS,
-            event: EVENT_NAMES.ACCOUNT_ADD_FAILED,
+            event: 'Error importing JSON',
             properties: {
-              account_type: EVENT.ACCOUNT_TYPES.IMPORTED,
-              account_import_type: EVENT.ACCOUNT_IMPORT_TYPES.JSON,
+              action: 'Import Account',
+              legacy_event: true,
             },
           });
           setSelectedAddress(firstAddress);

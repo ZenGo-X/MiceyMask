@@ -15,8 +15,6 @@ import {
   setLedgerTransportPreference,
   setDismissSeedBackUpReminder,
   setUseTokenDetection,
-  backupUserData,
-  restoreUserData,
 } from '../../../store/actions';
 import { getPreferences } from '../../../selectors';
 import { doesUserHaveALedgerAccount } from '../../../ducks/metamask/metamask';
@@ -28,7 +26,7 @@ export const mapStateToProps = (state) => {
     metamask,
   } = state;
   const {
-    featureFlags: { sendHexData, advancedInlineGas } = {},
+    featureFlags: { advancedInlineMicey, sendHexData, advancedInlineGas } = {},
     threeBoxSyncingAllowed,
     threeBoxDisabled,
     useNonceField,
@@ -47,6 +45,7 @@ export const mapStateToProps = (state) => {
 
   return {
     warning,
+    advancedInlineMicey,
     sendHexData,
     advancedInlineGas,
     showFiatInTestnets,
@@ -65,8 +64,8 @@ export const mapStateToProps = (state) => {
 
 export const mapDispatchToProps = (dispatch) => {
   return {
-    backupUserData: () => backupUserData(),
-    restoreUserData: (jsonString) => restoreUserData(jsonString),
+    setAdvancedInlineMiceyFeatureFlag: (shouldShow) =>
+      dispatch(setFeatureFlag('advancedInlineMicey', shouldShow)),
     setHexDataFeatureFlag: (shouldShow) =>
       dispatch(setFeatureFlag('sendHexData', shouldShow)),
     displayWarning: (warning) => dispatch(displayWarning(warning)),

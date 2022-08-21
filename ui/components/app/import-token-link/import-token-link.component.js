@@ -8,34 +8,28 @@ import Box from '../../ui/box/box';
 import { TEXT_ALIGN } from '../../../helpers/constants/design-system';
 import { detectNewTokens } from '../../../store/actions';
 import { MetaMetricsContext } from '../../../contexts/metametrics';
-import { EVENT, EVENT_NAMES } from '../../../../shared/constants/metametrics';
-import {
-  getIsTokenDetectionSupported,
-  getIsTokenDetectionInactiveOnMainnet,
-} from '../../../selectors';
+import { EVENT } from '../../../../shared/constants/metametrics';
+import { getIsMainnet, getIsTokenDetectionSupported } from '../../../selectors';
 
 export default function ImportTokenLink() {
   const trackEvent = useContext(MetaMetricsContext);
   const t = useI18nContext();
   const history = useHistory();
 
+  const isMainnet = useSelector(getIsMainnet);
   const isTokenDetectionSupported = useSelector(getIsTokenDetectionSupported);
-  const isTokenDetectionInactiveOnMainnet = useSelector(
-    getIsTokenDetectionInactiveOnMainnet,
-  );
 
-  const isTokenDetectionAvailable =
-    isTokenDetectionSupported ||
-    isTokenDetectionInactiveOnMainnet ||
+  const isTokenDetectionsupported =
+    isMainnet ||
+    (process.env.TOKEN_DETECTION_V2 && isTokenDetectionSupported) ||
     Boolean(process.env.IN_TEST);
 
   return (
     <Box className="import-token-link" textAlign={TEXT_ALIGN.CENTER}>
-      {isTokenDetectionAvailable && (
+      {isTokenDetectionsupported && (
         <>
           <Button
             className="import-token-link__link"
-            data-testid="refresh-list-button"
             type="link"
             onClick={() => detectNewTokens()}
           >
@@ -46,20 +40,20 @@ export default function ImportTokenLink() {
       )}
       <Button
         className="import-token-link__link"
-        data-testid="import-token-button"
         type="link"
         onClick={() => {
           history.push(IMPORT_TOKEN_ROUTE);
           trackEvent({
-            event: EVENT_NAMES.TOKEN_IMPORT_BUTTON_CLICKED,
+            event: 'Clicked "Add Token"',
             category: EVENT.CATEGORIES.NAVIGATION,
             properties: {
-              location: 'Home',
+              action: 'Token Menu',
+              legacy_event: true,
             },
           });
         }}
       >
-        {isTokenDetectionAvailable
+        {isTokenDetectionsupported
           ? t('importTokens')
           : t('importTokens').charAt(0).toUpperCase() +
             t('importTokens').slice(1)}
